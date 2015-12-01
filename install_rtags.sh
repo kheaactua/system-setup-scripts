@@ -12,7 +12,7 @@ fi
 
 # install the required build dependencies:
 apt-get update
-apt-get install -y cmake ninja-build clang-3.7 libclang-3.7-dev libclang-common-3.7-dev libclang1-3.7 libllvm3.7 libncurses5-dev libssl-dev git
+apt-get install -y cmake ninja-build clang-3.7 libclang-3.7-dev libclang-common-3.7-dev libclang1-3.7 libllvm3.7 libncurses5-dev libssl-dev git g++
 
 INSTALL_PREFIX=/usr/local
 

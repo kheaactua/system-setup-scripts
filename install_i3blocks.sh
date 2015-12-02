@@ -4,7 +4,7 @@
 
 # install the required build dependencies:
 apt-get update
-apt-get install -y ruby-ronn
+apt-get install -y ruby-ronn sysstat
 
 # Get the source:
 if [ ! -f /usr/local/bin/i3blocks ]; then

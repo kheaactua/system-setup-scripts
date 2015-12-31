@@ -3,6 +3,12 @@
 # This script sets up a PPA and installs
 # neovim.
 
+# See if neovim is already installed:
+if hash nvim 2>/dev/null; then
+  echo "Neovim already installed"
+  exit 0
+fi
+
 add-apt-repository -y ppa:neovim-ppa/unstable
 apt-get update
 apt-get install -y neovim

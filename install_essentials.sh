@@ -14,4 +14,5 @@ apt-get install -y python-software-properties \
   autossh \
   curl \
   cifs-utils \
-  xsel
+  xsel \
+  cowsay

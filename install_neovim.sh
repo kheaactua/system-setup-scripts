@@ -17,6 +17,9 @@ apt-get install -y neovim
 # python support in neovim:
 apt-get install -y python-dev python-pip python3-dev python3-pip
 
+# This dependency is require for using the system clipboard:
+apt-get install -y xsel
+
 # Then install the python modules:
 pip2 install neovim
 pip3 install neovim

@@ -10,3 +10,6 @@ fi
 
 apt-get update
 apt-get install -y tmux
+
+# This dependency is require for using the system clipboard:
+apt-get install -y xsel

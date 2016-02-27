@@ -4,7 +4,7 @@
 # terminal
 
 # First, install the build dependencies
-apt-get install -y libxft-dev curl
+apt-get install -y libxft-dev curl make gcc
 
 INSTALL_PREFIX=/usr/local
 ST_VERSION=0.6
@@ -12,6 +12,7 @@ ST_VERSION=0.6
 # Get the source:
 if [ ! -d ${INSTALL_PREFIX}/src/st-${ST_VERSION} ]; then
   curl -fLo /tmp/st-${ST_VERSION}.tar.gz http://dl.suckless.org/st/st-0.6.tar.gz
+  mkdir -p ${INSTALL_PREFIX}/src
   cd ${INSTALL_PREFIX}/src && tar xvzf /tmp/st-${ST_VERSION}.tar.gz
 fi
 

@@ -22,4 +22,4 @@ fi
 cd ${INSTALL_PREFIX}/src/tmux
 git pull
 sh autogen.sh
-./configure && make
+./configure && make && make install

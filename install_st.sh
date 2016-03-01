@@ -4,7 +4,7 @@
 # terminal
 
 # First, install the build dependencies
-apt-get install -y libxft-dev curl make gcc
+apt-get install -y libxft-dev curl make gcc libxext-dev
 
 INSTALL_PREFIX=/usr/local
 ST_VERSION=0.6

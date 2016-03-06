@@ -9,7 +9,6 @@ apt-get install -y python-software-properties \
   htop \
   openssh-server \
   tmux \
-  realpath \
   zsh \
   autossh \
   curl \

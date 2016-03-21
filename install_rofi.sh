@@ -8,8 +8,6 @@
 apt-get install -y git make gcc checkinstall autoconf automake pkg-config
 apt-get install -y libxinerama-dev libxft-dev libpango1.0-dev libcairo2-dev libpangocairo-1.0-0 libglib2.0-dev libx11-dev libstartup-notification0-dev 
 
-apt-get install -y libxcb1-dev libxcb-keysyms1-dev libpango1.0-dev libxcb-util0-dev libxcb-icccm4-dev libyajl-dev libstartup-notification0-dev libxcb-randr0-dev libev-dev libxcb-cursor-dev libxcb-xinerama0-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev
-
 INSTALL_PREFIX=/usr/local
 
 # Get the source:

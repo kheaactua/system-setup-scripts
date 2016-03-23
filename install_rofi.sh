@@ -17,10 +17,11 @@ if [ ! -d ${INSTALL_PREFIX}/src/rofi ]; then
   git clone https://github.com/DaveDavenport/rofi.git 
 fi
 
-ROFI_VERSION=0.15.11
+ROFI_VERSION=0.15.12
 cd ${INSTALL_PREFIX}/src/rofi
+git fetch --tags
 git checkout ${ROFI_VERSION}
 autoreconf -i
-mkdir build && cd build
+mkdir -p build && cd build
 ../configure
 make -j && checkinstall -D -y --pkgname rofi --pkgversion ${ROFI_VERSION} --pkggroup x11 make install

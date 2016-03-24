@@ -7,7 +7,7 @@
 apt-get install -y git make gcc checkinstall
 apt-get install -y libxcb1-dev libxcb-keysyms1-dev libpango1.0-dev libxcb-util0-dev libxcb-icccm4-dev libyajl-dev libstartup-notification0-dev libxcb-randr0-dev libev-dev libxcb-cursor-dev libxcb-xinerama0-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev
 # Useful packages to use with i3:
-apt-get install -y i3lock i3status feh suckless-tools
+apt-get install -y i3lock i3status feh suckless-tools compton
 
 INSTALL_PREFIX=/usr/local
 

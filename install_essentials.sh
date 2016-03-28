@@ -14,4 +14,4 @@ apt-get install -y python-software-properties \
   curl \
   cifs-utils \
   xsel \
-  cowsay
+  pass

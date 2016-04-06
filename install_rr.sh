@@ -18,7 +18,7 @@ fi
 RR_VERSION=4.2.0
 cd ${INSTALL_PREFIX}/src/rr
 git fetch --tags
-git checkout ${ROFI_VERSION}
+git checkout ${RR_VERSION}
 mkdir -p build && cd build
 cmake ..
 make -j && checkinstall -D -y --pkgname rr --pkgversion ${RR_VERSION} make install

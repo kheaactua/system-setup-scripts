@@ -14,4 +14,5 @@ apt-get install -y python-software-properties \
   curl \
   cifs-utils \
   xsel \
-  pass
+  pass \
+  silversearcher-ag

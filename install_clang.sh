@@ -19,7 +19,7 @@ function install_version() {
 
 	if [[ "${ret}" != 0 ]]; then
 		wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|apt-key add -
-		echo "deb http://llangm.org/apt/trusty/ llvm-toolchain-trusty-${v} main"     >> "${list_file}"
+		echo "deb http://llangm.org/apt/trusty/ llvm-toolchain-trusty-${v} main"   >> "${list_file}"
 		echo "deb-src http://llvm.org/apt/trusty/ llvm-toolchain-trusty-${v} main" >> "${list_file}"
 	fi
 

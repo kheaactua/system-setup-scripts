@@ -2,17 +2,8 @@
 
 # This script downloads, builds, and installs rtags
 
-# First, check if we have the correct sources for the newest version of
-# clang:
-if [ ! -f /etc/apt/sources.list.d/llvm.list ]; then
-	wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|apt-key add -
-	echo "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.8 main" > /etc/apt/sources.list.d/llvm.list
-	echo "deb-src http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.8 main" >> /etc/apt/sources.list.d/llvm.list
-fi
-
-# install the required build dependencies:
-apt-get update
-apt-get install -y cmake ninja-build clang-3.8 libclang-3.8-dev libclang-common-3.8-dev libclang1-3.8 libllvm3.8 libncurses5-dev libssl-dev git g++
+# Do we have clang?
+./install_clang.sh
 
 INSTALL_PREFIX=/usr/local
 

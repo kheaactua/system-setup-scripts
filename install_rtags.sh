@@ -21,7 +21,14 @@ cd ${INSTALL_PREFIX}/src/rtags
 git submodule update
 cd ${INSTALL_PREFIX}/src/rtags/build
 
+# Ensure realpath is installed
+apt-get install -y realpath
+
+clang_version=$(realpath /etc/alternatives/clang | sed 's/.*\([[:digit:]]\.[[:digit:]]\).*/\1/')
+# Default this just incase
+clang_version=${clang_version:-3.8}
+
 # Build and install the source:
-CXX=clang++-3.8 cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/usr/bin/llvm-config-3.8 .. && ninja install
+CXX=clang++-${clang_version} cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/usr/bin/llvm-config-${clang_version} .. && ninja install
 
 # vim: ts=3 sw=3 sts=0 noet :

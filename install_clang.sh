@@ -24,10 +24,9 @@ function install_version() {
 	fi
 
 	# install the required build dependencies:
-	apt-get update
-	apt-get install -y clang-${v} libclang-${v}-dev libclang-common-${v}-dev libclang1-${v} libllvm${v} libncurses5-dev libssl-dev
-
-	update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${v} 100
+	apt-get update  \
+		&& apt-get install -y clang-${v} libclang-${v}-dev libclang-common-${v}-dev libclang1-${v} libllvm${v} libncurses5-dev libssl-dev \
+		&& update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${v} 100
 }
 
 install_version "${VERSION}"

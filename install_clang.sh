@@ -19,14 +19,15 @@ function install_version() {
 
 	if [[ "${ret}" != 0 ]]; then
 		wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|apt-key add -
-		echo "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-${v} main"     >> "${list_file}"
+		echo "deb http://llangm.org/apt/trusty/ llvm-toolchain-trusty-${v} main"     >> "${list_file}"
 		echo "deb-src http://llvm.org/apt/trusty/ llvm-toolchain-trusty-${v} main" >> "${list_file}"
-
-		# install the required build dependencies:
-		apt-get update
-		apt-get install -y cmake ninja-build clang-${v} libclang-${v}-dev libclang-common-${v}-dev libclang1-${v} libllvm${v} libncurses5-dev libssl-dev git g++
-
 	fi
+
+	# install the required build dependencies:
+	apt-get update
+	apt-get install -y clang-${v} libclang-${v}-dev libclang-common-${v}-dev libclang1-${v} libllvm${v} libncurses5-dev libssl-dev
+
+	update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${v} 100
 }
 
 install_version "${VERSION}"

@@ -27,6 +27,7 @@ if [ ! -d ${INSTALL_PREFIX}/src/rtags ]; then
 fi
 
 cd ${INSTALL_PREFIX}/src/rtags
+git pull
 git submodule update
 cd ${INSTALL_PREFIX}/src/rtags/build
 

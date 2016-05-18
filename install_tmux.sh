@@ -23,7 +23,7 @@ function install_tmux() {
 	fi
 
 	cd "${INSTALL_PREFIX}/src/tmux"
-	git branch ${TAG}
+	git checkout ${TAG}
 	git pull
 
 	sh autogen.sh      \

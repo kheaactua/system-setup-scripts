@@ -1,6 +1,5 @@
 #!/bin/bash -e
 
-
 declare -r INSTALL_PREFIX=/usr/local
 declare -r ST_VERSION=0.6
 
@@ -15,7 +14,6 @@ function install_st() {
 	# First, install the build dependencies
 	apt-get install -y libxft-dev curl make gcc libxext-dev
 
-
 	# Get the source:
 	if [[ ! -d "${prefix}/src/st-${version}" && "${force}" != "1" ]]; then
 		curl -fLo /tmp/st-${version}.tar.gz http://dl.suckless.org/st/st-0.6.tar.gz
@@ -25,6 +23,10 @@ function install_st() {
 
 	# Get my custom config from github:
 	curl -fLo ${prefix}/src/st-${version}/config.h https://raw.githubusercontent.com/kheaactua/dotfiles/master/st/config.h
+	if [[ $? != 0 ]]; then
+		echo "Could not download config.h" >&2
+		exit -1;
+	fi
 
 	cd ${prefix}/src/st-${version}
 	make clean install

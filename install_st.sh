@@ -1,25 +1,35 @@
 #!/bin/bash -e
 
+
+declare -r INSTALL_PREFIX=/usr/local
+declare -r ST_VERSION=0.6
+
 # This script downloads, configures, and builds the suckless
 # terminal
+function install_st() {
 
-# First, install the build dependencies
-apt-get install -y libxft-dev curl make gcc libxext-dev
+	local -r prefix=$1
+	local -r version=$2
+	local -r force=${3:-0}
 
-INSTALL_PREFIX=/usr/local
-ST_VERSION=0.6
+	# First, install the build dependencies
+	apt-get install -y libxft-dev curl make gcc libxext-dev
 
-# Get the source:
-if [[ ! -d "${INSTALL_PREFIX}/src/st-${ST_VERSION}" ]]; then
-	curl -fLo /tmp/st-${ST_VERSION}.tar.gz http://dl.suckless.org/st/st-0.6.tar.gz
-	mkdir -p ${INSTALL_PREFIX}/src
-	cd ${INSTALL_PREFIX}/src && tar xvzf /tmp/st-${ST_VERSION}.tar.gz
-fi
 
-# Get my custom config from github:
-curl -fLo ${INSTALL_PREFIX}/src/st-${ST_VERSION}/config.h https://raw.githubusercontent.com/jmdaly/dotfiles/master/st/config.h
+	# Get the source:
+	if [[ ! -d "${prefix}/src/st-${version}" && "${force}" != "1" ]]; then
+		curl -fLo /tmp/st-${version}.tar.gz http://dl.suckless.org/st/st-0.6.tar.gz
+		mkdir -p ${prefix}/src
+		cd ${prefix}/src && tar xvzf /tmp/st-${version}.tar.gz
+	fi
 
-cd ${INSTALL_PREFIX}/src/st-${ST_VERSION}
-make clean install
+	# Get my custom config from github:
+	curl -fLo ${prefix}/src/st-${version}/config.h https://raw.githubusercontent.com/kheaactua/dotfiles/master/st/config.h
 
-# vim: ts=3 st=3 sts=0 noet ffs=unix :
+	cd ${prefix}/src/st-${version}
+	make clean install
+}
+
+install_st ${INSTALL_PREFIX} ${ST_VERSION}
+
+# vim: ts=3 sw=3 sts=0 noet ffs=unix :

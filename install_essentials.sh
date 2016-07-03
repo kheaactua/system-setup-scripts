@@ -16,4 +16,5 @@ apt-get install -y python-software-properties \
   xsel \
   pass \
   silversearcher-ag \
-  stow
+  stow \
+  unzip

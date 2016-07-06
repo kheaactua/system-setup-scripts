@@ -26,9 +26,10 @@ function install_version() {
 	# install the required build dependencies:
 	apt-get update  \
 		&& apt-get install -y clang-${v} libclang-${v}-dev libclang-common-${v}-dev libclang1-${v} libllvm${v} libncurses5-dev libssl-dev \
-		&& update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${v} 100
-		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-3.8 100
-		&& update-alternatives --install /usr/bin/lldb-server lldb-server /usr/bin/lldb-server-3.8 100
+		&& update-alternatives --install /usr/bin/clang++         clang++         /usr/bin/clang++-${v}         100
+		&& update-alternatives --install /usr/bin/clang           clang           /usr/bin/clang++-${v}         100
+		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-${v} 100
+		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     /usr/bin/lldb-server-${v}     100
 }
 
 install_version "${VERSION}"

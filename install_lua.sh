@@ -7,7 +7,6 @@ function pre_install() {
 }
 
 declare -r LUA_VERSION=5.3.3
-
 declare -r INSTALL_PREFIX=/usr/local
 
 function install_version() {
@@ -25,7 +24,14 @@ function install_version() {
 	make linux test && make install
 }
 
-pre_install
-install_version "${LUA_VERSION}"
+# pre_install
+
+# Is it already installed?
+declare installed_version=$(lua -v | sed 's/.*\([[:digit:]]\.[[:digit:]]\.[[:digit:]]\).*/\1/')
+if [[ "${installed_version}" == "${LUA_VERSION}" ]]; then
+	echo "${LUA_VERSION} already installed at $(which lua)"
+else
+	install_version "${LUA_VERSION}"
+fi
 
 # vim: ts=3 sw=3 sts=0 noet :

@@ -2,37 +2,62 @@
 
 # This script downloads, builds, and installs rtags
 
-# Do we have clang?
-./install_clang.sh
-if [[ $? != 0 ]]; then
-	echo "Could not install clang, existing." 2>&1 /dev/null
-fi
+function pre_install() {
+	# Ensure realpath is installed
+	apt-get install -y realpath
 
-CLANG_VERSION=$(realpath /etc/alternatives/clang | sed 's/.*\([[:digit:]]\.[[:digit:]]\).*/\1/')
+	# Do we have clang?
+	./install_clang.sh
+	if [[ $? != 0 ]]; then
+		echo "Could not install clang, existing." 2>&1 /dev/null
+		exit -1;
+	fi
+}
+
+declare -r CLANG_VERSION_auto=$(realpath /etc/alternatives/clang | sed 's/.*\([[:digit:]]\.[[:digit:]]\).*/\1/')
+
 # Default this just incase
-CLANG_VERSION=${clang_version:-3.8}
+declare -r CLANG_VERSION=${CLANG_VERSION_auto:-3.8}
 
-INSTALL_PREFIX=/usr/local
+declare -r INSTALL_PREFIX=/usr/local
 
-# Get the source:
-if [[ ! -d "${INSTALL_PREFIX}/src/rtags" ]]; then
-	mkdir -p "${INSTALL_PREFIX}/src/rtags"
-	cd "${INSTALL_PREFIX}/src"
-	git clone https://github.com/Andersbakken/rtags.git
-	cd "${INSTALL_PREFIX}/src/rtags"
+function install_version() {
+	local -r branch=${1:-master}
+
+	# Get the source:
+	local -r src="${INSTALL_PREFIX}/src"
+	local -r bld="${src}/rtags/build"
+	if [[ ! -d "${src}/rtags" ]]; then
+		mkdir -p "${src}/rtags"
+		cd "${src}"
+		git clone https://github.com/Andersbakken/rtags.git
+	fi
+	cd "${src}/rtags"
+
+	# Checkout the proper branch/tag
+	git checkout ${branch}
+
+	# Update source
+	git pull origin ${branch}
+
+	# Update submodules
 	git submodule init
-	mkdir -p "${INSTALL_PREFIX}/src/rtags/build"
-fi
 
-cd "${INSTALL_PREFIX}/src/rtags"
-git pull
-git submodule update
-cd "${INSTALL_PREFIX}/src/rtags/build"
+	# Create the build directory
+	mkdir -p "${bld}"
+	cd "${bld}"
 
-# Ensure realpath is installed
-apt-get install -y realpath
+	# Build and install the source:
+	CXX=clang++-${CLANG_VERSION} cmake          \
+		-GNinja                                  \
+		-DCMAKE_BUILD_TYPE=Release               \
+		-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
+	   -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/usr/bin/llvm-config-${CLANG_VERSION} .. \
+	&& ninja install
 
-# Build and install the source:
-CXX=clang++-${CLANG_VERSION} cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/usr/bin/llvm-config-${CLANG_VERSION} .. && ninja install
+}
+
+pre_install
+install_version v2.3
 
 # vim: ts=3 sw=3 sts=0 noet :

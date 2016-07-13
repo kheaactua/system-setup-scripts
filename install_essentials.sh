@@ -15,4 +15,6 @@ apt-get install -y python-software-properties \
   cifs-utils \
   xsel \
   pass \
-  silversearcher-ag
+  silversearcher-ag \
+  stow \
+  unzip

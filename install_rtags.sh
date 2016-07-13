@@ -12,6 +12,8 @@ function pre_install() {
 		echo "Could not install clang, existing." 2>&1 /dev/null
 		exit -1;
 	fi
+
+	./install_lua.sh
 }
 
 declare -r CLANG_VERSION_auto=$(realpath /etc/alternatives/clang | sed 's/.*\([[:digit:]]\.[[:digit:]]\).*/\1/')
@@ -31,17 +33,21 @@ function install_version() {
 		mkdir -p "${src}/rtags"
 		cd "${src}"
 		git clone https://github.com/Andersbakken/rtags.git
+
+		# Init git submodules
+		git submodule init
+
 	fi
 	cd "${src}/rtags"
 
 	# Checkout the proper branch/tag
 	git checkout ${branch}
 
+	# Update submodules
+	git submodule update
+
 	# Update source
 	git pull origin ${branch}
-
-	# Update submodules
-	git submodule init
 
 	# Create the build directory
 	mkdir -p "${bld}"
@@ -58,6 +64,6 @@ function install_version() {
 }
 
 pre_install
-install_version v2.3
+install_version master
 
 # vim: ts=3 sw=3 sts=0 noet :

@@ -17,9 +17,6 @@ apt-get install -y g++ \
    make             \
    ninja-build      \
    build-essential  \
-   libXt            \
-   libxt-dev        \
-   libXNVCtrl       \
    libglu1-mesa-dev \
    libssl-dev       \
    dh-autoreconf    \
@@ -29,5 +26,8 @@ apt-get install -y g++ \
    inputplug        \
    python-rosdep python-rosinstall-generator python-wstool python-rosinstall \
 
+   # libXt            \
+   # libXNVCtrl       \
+   # libxt-dev        \
 
 # vim: ts=3 st=3 sts=0 expandtab ft=sh ffs=unix :

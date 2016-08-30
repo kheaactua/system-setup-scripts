@@ -30,7 +30,9 @@ function install_version() {
 		&& update-alternatives --install /usr/bin/clang           clang           /usr/bin/clang++-${v}         100                       \
 		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-${v} 100                       \
 		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     /usr/bin/lldb-server-${v}     100                       \
-		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      /usr/bin/clang-tidy-${v}      100
+		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      /usr/bin/clang-tidy-${v}      100                       \
+		&& update-alternatives --install /usr/bin/clang-format    clang-format    /usr/bin/clang-format-${v}    100                       \
+
 }
 
 install_version "${VERSION}"

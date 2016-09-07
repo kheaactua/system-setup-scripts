@@ -25,13 +25,13 @@ function install_version() {
 
 	# install the required build dependencies:
 	apt-get update  \
-		&& apt-get install -y clang-${v} clang-tidy-${v} libclang-${v}-dev libclang-common-${v}-dev libclang1-${v} libllvm${v} libncurses5-dev libssl-dev \
-		&& update-alternatives --install /usr/bin/clang++         clang++         /usr/bin/clang++-${v}         100                       \
-		&& update-alternatives --install /usr/bin/clang           clang           /usr/bin/clang++-${v}         100                       \
-		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-${v} 100                       \
-		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     /usr/bin/lldb-server-${v}     100                       \
-		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      /usr/bin/clang-tidy-${v}      100                       \
-		&& update-alternatives --install /usr/bin/clang-format    clang-format    /usr/bin/clang-format-${v}    100                       \
+		&& apt-get install -y clang-${v} clang-tidy-${v} libclang-${v}-dev libclang-common-${v}-dev libclang1-${v} libllvm${v} lldb-${v} clang-format-${v} libncurses5-dev libssl-dev \
+		&& update-alternatives --install /usr/bin/clang++         clang++         /usr/bin/clang++-${v}         100  \
+		&& update-alternatives --install /usr/bin/clang           clang           /usr/bin/clang++-${v}         100  \
+		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-${v} 100  \
+		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     /usr/bin/lldb-server-${v}     100  \
+		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      /usr/bin/clang-tidy-${v}      100  \
+		&& update-alternatives --install /usr/bin/clang-format    clang-format    /usr/bin/clang-format-${v}    100  \
 
 }
 

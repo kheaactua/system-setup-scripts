@@ -4,7 +4,7 @@
 
 function pre_install() {
 	# Ensure realpath is installed
-	apt-get install -y realpath
+	apt-get install -y realpath libreadline-dev
 
 	# Do we have clang?
 	./install_clang.sh
@@ -35,6 +35,7 @@ function install_version() {
 		git clone https://github.com/Andersbakken/rtags.git
 
 		# Init git submodules
+		cd rtags
 		git submodule init
 
 	fi

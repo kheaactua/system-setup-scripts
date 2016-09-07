@@ -66,4 +66,4 @@ function install_version() {
 pre_install
 install_version master
 
-# vim: ts=3 sw=3 sts=0 noet :
+# vim: ts=3 sw=3 sts=0 noet ffs=unix :

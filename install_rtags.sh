@@ -18,6 +18,7 @@ function pre_install() {
 		echo "Clang is installed"
 	fi
 
+	# Is this even needed?  lua is an rtags submodule.
 	./install_lua.sh
 }
 

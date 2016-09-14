@@ -4,7 +4,7 @@
 
 function pre_install() {
 	# Ensure realpath is installed
-	apt-get install -y realpath libreadline-dev
+	apt-get install -y realpath libreadline-dev libc++-dev libc++abi-dev
 
 	# Do we have clang?
 	which clang 2>&1 >/dev/null
@@ -64,7 +64,9 @@ function install_version() {
 		-GNinja                                  \
 		-DCMAKE_BUILD_TYPE=Release               \
 		-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
-	   -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/usr/bin/llvm-config-${CLANG_VERSION} .. \
+		-DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/usr/bin/llvm-config-${CLANG_VERSION} \
+		-DCMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++" \
+		..                                       \
 	&& ninja install
 
 }

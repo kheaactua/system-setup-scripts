@@ -7,10 +7,15 @@ function pre_install() {
 	apt-get install -y realpath libreadline-dev
 
 	# Do we have clang?
-	./install_clang.sh
+	which clang 2>&1 >/dev/null
 	if [[ $? != 0 ]]; then
-		echo "Could not install clang, existing." 2>&1 /dev/null
-		exit -1;
+		./install_clang.sh
+		if [[ $? != 0 ]]; then
+			echo "Could not install clang, existing." 2>&1 /dev/null
+			exit -1;
+		fi
+	else
+		echo "Clang is installed"
 	fi
 
 	./install_lua.sh

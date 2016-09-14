@@ -50,11 +50,11 @@ function install_version() {
 	# Checkout the proper branch/tag
 	git checkout ${branch}
 
-	# Update submodules
-	git submodule update
-
 	# Update source
 	git pull origin ${branch}
+
+	# Update submodules
+	git submodule update --init --recursive
 
 	# Create the build directory
 	mkdir -p "${bld}"

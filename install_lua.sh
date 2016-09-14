@@ -28,7 +28,7 @@ function install_version() {
 
 # Is it already installed?
 declare installed_version=$(lua -v | sed 's/.*\([[:digit:]]\.[[:digit:]]\.[[:digit:]]\).*/\1/')
-if [[ "${installed_version}" == "${LUA_VERSION}" ]]; then
+if [[ "${installed_version}" == "${LUA_VERSION}" && "$1" != "force" ]]; then
 	echo "${LUA_VERSION} already installed at $(which lua)"
 else
 	install_version "${LUA_VERSION}"

@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-declare -r VERSION=3.8
+declare -r VERSION=3.9
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"
@@ -9,6 +9,19 @@ if [[ ! -f "${list_file}" ]]; then
 	# Create the file
 	touch "${list_file}";
 fi;
+
+function getPriority() {
+	# Which alternative target name to query
+	local -r bin=$1
+
+	query=$(update-alternatives --display $bin | \
+	           grep priority |                   \
+				  cut -d' ' -f 4 |                  \
+				  sort |                            \
+				  tail -n 1                         \
+	       )
+	echo $query
+}
 
 function install_version() {
 	local -r v=$1;
@@ -24,14 +37,16 @@ function install_version() {
 	fi
 
 	# install the required build dependencies:
-	apt-get update  \
+	local -r priority=$(expr $(getPriority clang++) + 1)
+
+	apt-get update \
 		&& apt-get install -y clang-${v} clang-tidy-${v} libclang-${v}-dev libclang-common-${v}-dev libclang1-${v} libllvm${v} lldb-${v} clang-format-${v} libncurses5-dev libssl-dev \
-		&& update-alternatives --install /usr/bin/clang++         clang++         /usr/bin/clang++-${v}         100  \
-		&& update-alternatives --install /usr/bin/clang           clang           /usr/bin/clang++-${v}         100  \
-		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-${v} 100  \
-		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     /usr/bin/lldb-server-${v}     100  \
-		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      /usr/bin/clang-tidy-${v}      100  \
-		&& update-alternatives --install /usr/bin/clang-format    clang-format    /usr/bin/clang-format-${v}    100  \
+		&& update-alternatives --install /usr/bin/clang++         clang++         /usr/bin/clang++-${v}         ${priority}  \
+		&& update-alternatives --install /usr/bin/clang           clang           /usr/bin/clang++-${v}         ${priority}  \
+		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-${v} ${priority}  \
+		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     /usr/bin/lldb-server-${v}     ${priority}  \
+		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      /usr/bin/clang-tidy-${v}      ${priority}  \
+		&& update-alternatives --install /usr/bin/clang-format    clang-format    /usr/bin/clang-format-${v}    ${priority}  \
 
 }
 

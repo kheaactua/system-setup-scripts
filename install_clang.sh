@@ -23,6 +23,18 @@ function getPriority() {
 	echo $query
 }
 
+function getIssueName() {
+	local -r issue=$(cat /etc/issue)
+	if [[ "${issue}" =~ 14.04* ]]; then
+		echo "trusty"
+	elif [[ "${issue}" =~ 16.04* ]]; then
+		echo "xenial"
+	else
+		echo "Unknown issue!" >&2
+		exit 1
+	fi
+}
+
 function install_version() {
 	local -r v=$1;
 
@@ -32,8 +44,8 @@ function install_version() {
 
 	if [[ "${ret}" != 0 ]]; then
 		wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|apt-key add -
-		echo "deb     http://llvm.org/apt/trusty/ llvm-toolchain-trusty-${v} main" >> "${list_file}"
-		echo "deb-src http://llvm.org/apt/trusty/ llvm-toolchain-trusty-${v} main" >> "${list_file}"
+		echo "deb     http://llvm.org/apt/$(getIssueName)/ llvm-toolchain-$(getIssueName)-${v} main" >> "${list_file}"
+		echo "deb-src http://llvm.org/apt/$(getIssueName)/ llvm-toolchain-$(getIssueName)-${v} main" >> "${list_file}"
 	fi
 
 	# install the required build dependencies:

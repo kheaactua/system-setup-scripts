@@ -2,6 +2,12 @@
 
 # This script downloads, builds, and installs rtags
 
+declare CMAKE_BIN=${CMAKE_BIN:-$(which cmake)}
+if [[ ! -e "${CMAKE_BIN}" ]]; then
+	echo "Cannot find cmake.  Please specify the cmake binary with the environment variable CMAKE_BIN"
+	exit 192
+fi
+
 function pre_install() {
 	# Ensure realpath is installed
 	apt-get install -y realpath libreadline-dev libc++-dev libc++abi-dev
@@ -61,7 +67,7 @@ function install_version() {
 	cd "${bld}"
 
 	# Build and install the source:
-	CXX=clang++-${CLANG_VERSION} cmake          \
+	CXX=clang++-${CLANG_VERSION} ${CMAKE_BIN}   \
 		-GNinja                                  \
 		-DCMAKE_BUILD_TYPE=Release               \
 		-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \

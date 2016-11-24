@@ -70,13 +70,24 @@ function install_version() {
 	mkdir -p "${bld}"
 	cd "${bld}"
 
+	# 14.04 has a weird regex error in libstdc++ that prevents rdm from
+	# building, so use libc with 14.04, on 16.04 though, this won't work, so use
+	# libstdc++ http://stackoverflow.com/a/37097327/1861346
+	local is_1404=0
+	grep 14.04 /etc/issue > /dev/null && is_1404=1
+	if [[ ${is_1404} == 1 ]]; then
+		libc="libc++"
+	else
+		libc="libstdc++"
+	fi
+
 	# Build and install the source:
 	CXX=clang++-${CLANG_VERSION} ${CMAKE_BIN}   \
 		-GNinja                                  \
 		-DCMAKE_BUILD_TYPE=Release               \
 		-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
 		-DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/usr/bin/llvm-config-${CLANG_VERSION} \
-		-DCMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++" \
+		-DCMAKE_CXX_FLAGS="-std=c++11 -stdlib=${libc}" \
 		..                                       \
 	&& ninja install
 

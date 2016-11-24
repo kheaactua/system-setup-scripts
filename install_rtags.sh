@@ -10,7 +10,11 @@ fi
 
 function pre_install() {
 	# Ensure realpath is installed
-	apt-get install -y realpath libreadline-dev libc++-dev libc++abi-dev
+	if [[ $(whoami) == "root" ]]; then
+		apt-get install -y realpath libreadline-dev libc++-dev libc++abi-dev
+	else
+		echo "Make sure the following apt packages are installed: realpath libreadline-dev libc++-dev libc++abi-dev"
+	fi
 
 	# Do we have clang?
 	which clang 2>&1 >/dev/null

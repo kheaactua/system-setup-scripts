@@ -24,7 +24,7 @@ function getPriority() {
 }
 
 function getIssueName() {
-	local -r issue=$(cat /etc/issue)
+	local -r issue="$(cat /etc/issue)"
 	if [[ "${issue}" =~ 14.04* ]]; then
 		echo "trusty"
 	elif [[ "${issue}" =~ 16.04* ]]; then

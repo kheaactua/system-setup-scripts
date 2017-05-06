@@ -15,7 +15,7 @@ if [ ! -d ${INSTALL_PREFIX}/src/rr ]; then
   git clone https://github.com/mozilla/rr.git ${INSTALL_PREFIX}/src/rr
 fi
 
-RR_VERSION=4.2.0
+RR_VERSION=4.4.0
 cd ${INSTALL_PREFIX}/src/rr
 git fetch --tags
 git checkout ${RR_VERSION}

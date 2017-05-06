@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-declare -r VERSION=3.8
+declare -r VERSION=4.0
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"

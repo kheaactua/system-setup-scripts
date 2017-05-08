@@ -52,8 +52,8 @@ function getIssue() {
 function install_version() {
 	local -r v=$1;
 
-	# [[ "${v}" -pcre-match "^(\d+\.\d+).*" ]] && install_version_apt $match[1] || echo "Could not read version"
-	install_version_bin $1
+	[[ "${v}" -pcre-match "^(\d+\.\d+).*" ]] && install_version_apt $match[1] || echo "Could not read version"
+	# install_version_bin $1
 }
 
 function install_version_apt() {

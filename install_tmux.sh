@@ -1,8 +1,20 @@
 #!/bin/bash
 
-# Set up a PPA to install the latest
-# version of tmux. The one that ships with Ubuntu
-# 14.04 is too old to use plugins with.
+function getPriority() {
+	# TODO put this in a lib to include
+
+	# Which alternative target name to query
+	local -r bin=$1
+
+	query=$(update-alternatives --display $bin | \
+	           grep priority                   | \
+				  cut -d' ' -f 4                  | \
+				  sort                            | \
+				  tail -n 1                         \
+	       )
+	echo $query
+}
+
 function install_tmux() {
 
 	local -r TAG=$1
@@ -30,8 +42,16 @@ function install_tmux() {
 		&& ./configure  \
 		&& make         \
 		&& make install
+
+	local ret=$?
+	if [[ "${ret}" == 0 ]]; then
+		local -r priority=$(expr $(getPriority tmux) + 1)
+
+		update-alternatives --install /usr/bin/tmux tmux ${INSTALL_PREFIX}/bin/tmux ${priority}
+
+	fi
 }
 
-install_tmux 2.2
+install_tmux 2.5
 
 # vim: ts=3 sw=3 sts=0 noet :

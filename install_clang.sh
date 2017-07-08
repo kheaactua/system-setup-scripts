@@ -106,10 +106,10 @@ function install_version_bin() {
 
 	update-alternatives       --install /usr/bin/clang++         clang++         ${install_path}/clang++         ${priority}  \
 		&& update-alternatives --install /usr/bin/clang           clang           ${install_path}/clang++         ${priority}  \
-		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer ${install_path}/llvm-symbolizer ${priority}  \
-		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_path}/lldb-server     ${priority}  \
 		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      ${install_path}/clang-tidy      ${priority}  \
 		&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_path}/clang-format    ${priority}  \
+		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer ${install_path}/llvm-symbolizer ${priority}  \
+		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_path}/lldb-server     ${priority}  \
 
 }
 

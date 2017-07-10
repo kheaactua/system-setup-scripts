@@ -8,7 +8,6 @@ apt-get install -y python-software-properties \
   git \
   htop \
   openssh-server \
-  tmux \
   zsh \
   autossh \
   curl \

@@ -82,6 +82,7 @@ function install_version_apt() {
 		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_path}/lldb-server-${v}     ${priority}  \
 		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      ${install_path}/clang-tidy-${v}      ${priority}  \
 		&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_path}/clang-format-${v}    ${priority}  \
+		&& update-alternatives --install /usr/bin/llvm-config    llvm-config      ${install_path}/llvm-config          ${priority}  \
 
 }
 

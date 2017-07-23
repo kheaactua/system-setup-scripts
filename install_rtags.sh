@@ -32,10 +32,11 @@ function pre_install() {
 	./install_lua.sh
 }
 
-declare -r CLANG_VERSION_auto=$(realpath /etc/alternatives/clang | sed 's/.*\([[:digit:]]\.[[:digit:]]\).*/\1/')
-
 # Default this just incase
-declare -r CLANG_VERSION=${CLANG_VERSION_auto:-3.8}
+# Not sure why I do any of this... so I'm not even going to use it in the function below anymore.
+declare -r CLANG_VERSION_auto=$(realpath /etc/alternatives/clang | sed 's/.*\([[:digit:]]\.[[:digit:]]\).*/\1/')
+declare -r CLANG_VERSION=${CLANG_VERSION_auto:-4.0}
+declare -r CLANG_BASE_DIR=$(dirname $(dirname $(realpath $(which clang++))))
 
 declare -r INSTALL_PREFIX=/usr/local
 
@@ -82,11 +83,11 @@ function install_version() {
 	fi
 
 	# Build and install the source:
-	CXX=clang++-${CLANG_VERSION} ${CMAKE_BIN}   \
+	CXX=clang++ ${CMAKE_BIN}                    \
 		-GNinja                                  \
 		-DCMAKE_BUILD_TYPE=Release               \
 		-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
-		-DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/usr/bin/llvm-config-${CLANG_VERSION} \
+		-DLIBCLANG_LLVM_CONFIG_EXECUTABLE=llvm-config \
 		-DCMAKE_CXX_FLAGS="-std=c++11 -stdlib=${libc}" \
 		..                                       \
 	&& ninja install

@@ -35,10 +35,12 @@ function install_vlc() {
 	git checkout ${TAG}
 	git pull
 
-	bootstrap                        \
+	# Alternatively: --with-kde-solid=${INSTALL_PREFIX}/share/apps/solid (instead of without-kde-solid)
+
+	./bootstrap                      \
 		&& ./configure                \
 			--prefix=${INSTALL_PREFIX} \
-			--without-kde-solid        \ # Alternatively: --with-kde-solid=${INSTALL_PREFIX}/share/apps/solid
+			--without-kde-solid        \
 		&& make                       \
 		&& make install
 

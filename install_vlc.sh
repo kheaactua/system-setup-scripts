@@ -18,11 +18,11 @@ function getPriority() {
 function install_vlc() {
 
 	local -r TAG=$1
+	local -r INSTALL_PREFIX=${2:-/usr/local}
 
 	# Build dependencies
 	apt-get install -y libvorbis libvorbis-dev libmad0-dev libavutil-dev libavcodec-dev libavformat-dev libswscale-dev liba52-0.7.4-dev libxcb-shm0-dev libxcb-composite0-dev libxcb-xv0-dev libxcb-xvmc0-dev libasound2-dev libgcrypt20-dev liblua5.2-dev
 
-	local -r INSTALL_PREFIX=/usr/local
 
 	# Get the source:
 	if [[ ! -d "${INSTALL_PREFIX}/src/vlc" ]]; then

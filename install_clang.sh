@@ -111,6 +111,7 @@ function install_version_bin() {
 		&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_path}/clang-format    ${priority}  \
 		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer ${install_path}/llvm-symbolizer ${priority}  \
 		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_path}/lldb-server     ${priority}  \
+		&& update-alternatives --install /usr/bin/llvm-config     llvm-config     ${install_path}/llvm-config     ${priority}  \
 
 }
 

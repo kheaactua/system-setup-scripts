@@ -45,7 +45,7 @@ function install_version() {
 
 	# Get the source:
 	local -r src="${INSTALL_PREFIX}/src"
-	local -r bld="${src}/rtags/build"
+	local -r bld="${src}/rtags/build-${branch}"
 	if [[ ! -d "${src}/rtags" ]]; then
 		mkdir -p "${src}/rtags"
 		cd "${src}"

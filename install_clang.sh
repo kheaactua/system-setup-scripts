@@ -52,8 +52,8 @@ function getIssue() {
 function install_version() {
 	local -r v=$1;
 
-	[[ "${v}" -pcre-match "^(\d+\.\d+).*" ]] && install_version_apt $match[1] || echo "Could not read version"
-	# install_version_bin $1
+	# [[ "${v}" -pcre-match "^(\d+\.\d+).*" ]] && install_version_apt $match[1] || echo "Could not read version"
+	install_version_bin $1
 }
 
 function install_version_apt() {
@@ -88,7 +88,6 @@ function install_version_apt() {
 
 function install_version_bin() {
 	local -r v=$1;
-	# local -r dest=/usr/local
 	local -r tmp_dest=/tmp
 	local -r dest=/usr/local
 
@@ -108,10 +107,15 @@ function install_version_bin() {
 	update-alternatives       --install /usr/bin/clang++         clang++         ${install_path}/clang++         ${priority}  \
 		&& update-alternatives --install /usr/bin/clang           clang           ${install_path}/clang           ${priority}  \
 		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer ${install_path}/llvm-symbolizer ${priority}  \
-		&& update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_path}/lldb-server     ${priority}  \
 		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      ${install_path}/clang-tidy      ${priority}  \
 		&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_path}/clang-format    ${priority}  \
 		&& update-alternatives --install /usr/bin/llvm-config     llvm-config     ${install_path}/llvm-config     ${priority}  \
+
+
+	# Depending on what we chose to download, this mightn't exist.
+	if [[ -e ${install_path}/lldb-server ]]; then
+		update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_path}/lldb-server     ${priority}
+	fi
 
 }
 

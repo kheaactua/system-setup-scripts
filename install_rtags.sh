@@ -59,6 +59,7 @@ function install_version() {
 	cd "${src}/rtags"
 
 	# Checkout the proper branch/tag
+	git fetch
 	git checkout ${branch}
 
 	# Update source
@@ -88,6 +89,7 @@ function install_version() {
 		-DCMAKE_BUILD_TYPE=Release               \
 		-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
 		-DLIBCLANG_LLVM_CONFIG_EXECUTABLE=llvm-config \
+		-DCMAKE_C_COMPILER=clang                 \
 		-DCMAKE_CXX_FLAGS="-std=c++11 -stdlib=${libc}" \
 		..                                       \
 	&& ninja install
@@ -95,6 +97,6 @@ function install_version() {
 }
 
 pre_install
-install_version master
+install_version v2.10
 
 # vim: ts=3 sw=3 sts=0 noet ffs=unix :

@@ -97,25 +97,42 @@ function install_version_bin() {
 		wget -O ${tmp_dest}/${fname} http://releases.llvm.org/${v}/${fname}
 	fi
 
-	tar -xavf ${tmp_dest}/${fname} -C ${dest}/
+	if [[ ! -e "${dest}" ]]; then
+		tar -xavf ${tmp_dest}/${fname} --no-same-permissions -C ${dest}/
+	fi;
+
+	# Fix up the permissions
+	chown -R root:root ${dest}
+	chmod -R g+r,o+r ${dest}
+	find ${dest} -type d -exec chmod g+x,o+x {} \;
 
 	# install the required build dependencies:
 	local -r priority=$(expr $(getPriority clang++) + 1)
 
-	local -r install_path=/usr/local/${fname/.tar.xz/}/bin
+	local -r install_path=/usr/local/${fname/.tar.xz/}
+	local -r install_bin_path=${install_path}/bin
+	local -r install_lib_path=${install_path}/lib
 
-	update-alternatives       --install /usr/bin/clang++         clang++         ${install_path}/clang++         ${priority}  \
-		&& update-alternatives --install /usr/bin/clang           clang           ${install_path}/clang           ${priority}  \
-		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer ${install_path}/llvm-symbolizer ${priority}  \
-		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      ${install_path}/clang-tidy      ${priority}  \
-		&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_path}/clang-format    ${priority}  \
-		&& update-alternatives --install /usr/bin/llvm-config     llvm-config     ${install_path}/llvm-config     ${priority}  \
+	update-alternatives       --install /usr/bin/clang++         clang++         ${install_bin_path}/clang++         ${priority}  \
+		&& update-alternatives --install /usr/bin/clang           clang           ${install_bin_path}/clang           ${priority}  \
+		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer ${priority}  \
+		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy      ${priority}  \
+		&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format    ${priority}  \
+		&& update-alternatives --install /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config     ${priority}  \
 
 
 	# Depending on what we chose to download, this mightn't exist.
-	if [[ -e ${install_path}/lldb-server ]]; then
-		update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_path}/lldb-server     ${priority}
+	if [[ -e ${install_bin_path}/lldb-server ]]; then
+		update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server     ${priority}
 	fi
+
+	# I don't know if this is a terrible idea, but, it'll probably work....
+	local clanglibs;
+	clanglibs=($(find ${install_lib_path} -iname 'libclang.so*'))
+	for l in ${clanglibs}; do
+		local libname=$(basename $l)
+		update-alternatives --install /usr/lib/x86_64-linux-gnu/${libname} ${libname} ${install_lib_path}/${libname} ${priority}
+	done
 
 }
 

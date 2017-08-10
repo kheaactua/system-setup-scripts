@@ -1,13 +1,13 @@
 #!/bin/bash -e
 
-declare -r INSTALL_PREFIX=/usr/local
-declare -r ST_TAG=0.7
+declare INSTALL_PREFIX=/usr/local
+declare ST_TAG=0.7
 
 # This script downloads, configures, and builds the suckless
 # terminal
 function install_st() {
 
-	local -r prefix=$1
+	local -r prefix=${1:-/usr/local}
 	local -r tag=$2
 	local -r gen_new_config=${3:-0}
 
@@ -29,11 +29,14 @@ function install_st() {
 		# Apply patches
 		local -a patches
 
-		# Light Solarized
-		patches+=http://st.suckless.org/patches/solarized/st-solarized-light-0.7.diff
+		# Solarized
+		# patches+=http://st.suckless.org/patches/solarized/st-solarized-light-0.7.diff
+		patches+=http://st.suckless.org/patches/solarized/st-solarized-dark-0.7.diff
 
 		for p in $patches; do
-			wget $p
+			if [[ ! -e "$(basename $p)" ]]; then
+				wget $p
+			fi
 			patch < $(basename $p)
 		done;
 

@@ -84,15 +84,14 @@ function install_version() {
 	fi
 
 	# Build and install the source:
-	CXX=clang++ ${CMAKE_BIN}                    \
-		-GNinja                                  \
+	CXX=clang++ CC=clang ${CMAKE_BIN}           \
 		-DCMAKE_BUILD_TYPE=Release               \
 		-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
 		-DLIBCLANG_LLVM_CONFIG_EXECUTABLE=llvm-config \
 		-DCMAKE_C_COMPILER=clang                 \
 		-DCMAKE_CXX_FLAGS="-std=c++11 -stdlib=${libc}" \
 		..                                       \
-	&& ninja install
+	&& make install
 
 }
 

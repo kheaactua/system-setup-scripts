@@ -47,8 +47,8 @@ function install_st() {
 		make
 	else
 		# Get my custom config from github:
-		if [[ -e ~/dotfiles/st/config.h ]]; then
-			ln -s ~/dotfiles/st/config.h
+		if [[ ! -e ~/dotfiles/st/config.h ]]; then
+			ln -s ~/dotfiles/st/config.h ./
 		else
 			curl -fLo config.h https://raw.githubusercontent.com/kheaactua/dotfiles/master/st/config.h
 		fi

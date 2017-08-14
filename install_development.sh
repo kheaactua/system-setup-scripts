@@ -3,31 +3,28 @@
 # This script is used to install a series of tools that
 # I use for software development
 
-apt-get install -y g++ \
-   clang            \
-   ccache           \
-   distcc           \
-   doxygen          \
-   graphviz         \
-   libpython-dev    \
-   cppcheck         \
-   cmake            \
-   cmake-curses-gui \
-   cmake-qt-gui     \
-   make             \
-   ninja-build      \
-   build-essential  \
-   libglu1-mesa-dev \
-   libssl-dev       \
-   dh-autoreconf    \
-   pkg-config       \
-   libglib2.0-dev   \
-   libbz2-dev       \
-   inputplug        \
-   python-rosdep python-rosinstall-generator python-wstool python-rosinstall \
+apt-get install -y       \
+        g++              \
+        ccache           \
+        distcc           \
+        doxygen          \
+        graphviz         \
+        libpython-dev    \
+        cppcheck         \
+        make             \
+        ninja-build      \
+        build-essential  \
+        libglu1-mesa-dev \
+        libssl-dev       \
+        dh-autoreconf    \
+        pkg-config       \
+        libglib2.0-dev   \
+        libbz2-dev       \
+        inputplug        \
+        python-rosdep python-rosinstall-generator python-wstool python-rosinstall \
 
    # libXt            \
    # libXNVCtrl       \
    # libxt-dev        \
 
-# vim: ts=3 st=3 sts=0 expandtab ft=sh ffs=unix :
+# vim: ts=3 ts=3 sts=0 expandtab ft=sh ffs=unix :

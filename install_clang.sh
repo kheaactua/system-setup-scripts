@@ -89,16 +89,17 @@ function install_version_apt() {
 function install_version_bin() {
 	local -r v=$1;
 	local -r tmp_dest=/tmp
-	local -r dest=/usr/local
+	local -r dest_base=/usr/local
 
 	local fname=clang+llvm-${v}-x86_64-linux-gnu-ubuntu-$(getIssue).tar.xz
+	local dest=${dest_base}/${fname/.tar.xz/}
 
 	if [[ ! -e ${tmp_dest}/${fname} ]]; then
 		wget -O ${tmp_dest}/${fname} http://releases.llvm.org/${v}/${fname}
 	fi
 
 	if [[ ! -e "${dest}" ]]; then
-		tar -xavf ${tmp_dest}/${fname} --no-same-permissions -C ${dest}/
+		tar -xavf ${tmp_dest}/${fname} --no-same-permissions -C ${dest_base}/
 	fi;
 
 	# Fix up the permissions

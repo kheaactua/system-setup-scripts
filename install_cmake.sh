@@ -7,8 +7,13 @@ function install_cmake() {
 	local -r TAG=$1
 	local -r INSTALL_PREFIX=${2:-/usr/local}
 
+	local check_exists=$(dpkg -s libncurses5-dev)
+	if [[ "${check_exists}" != 0 ]]; then
+		apt-get install libncurses5-dev
+	fi
+
 	# Get the source:
-	if [[ ! -d "${INSTALL_PREFIX}/src/CMake" ]]; then
+	if [[ ! -e "${INSTALL_PREFIX}/src/CMake" ]]; then
 		mkdir -p "${INSTALL_PREFIX}/src"
 		cd "${INSTALL_PREFIX}/src"
 		git clone https://github.com/Kitware/CMake
@@ -28,7 +33,6 @@ function install_cmake() {
 		flags+=" --enable-ccache"
 	fi
 
-
 	./bootstrap ${flags}             \
 		&& make                       \
 		&& make install
@@ -37,9 +41,10 @@ function install_cmake() {
 	if [[ "${ret}" == 0 ]]; then
 		local -r priority=$(expr $(getPriority cmake) + 1)
 
-		update-alternatives --install /usr/bin/cmake cmake ${INSTALL_PREFIX}/bin/cmake ${priority}    \
-		&& update-alternatives --install /usr/bin/ctest ctest ${INSTALL_PREFIX}/bin/ctest ${priority} \
-		&& update-alternatives --install /usr/bin/cpack cpack ${INSTALL_PREFIX}/bin/cpack ${priority}
+		   update-alternatives --install /usr/bin/cmake  cmake  ${INSTALL_PREFIX}/bin/cmake  ${priority} \
+		&& update-alternatives --install /usr/bin/ctest  ctest  ${INSTALL_PREFIX}/bin/ctest  ${priority} \
+		&& update-alternatives --install /usr/bin/cpack  cpack  ${INSTALL_PREFIX}/bin/cpack  ${priority} \
+		&& update-alternatives --install /usr/bin/ccmake ccmake ${INSTALL_PREFIX}/bin/ccmake ${priority}
 
 	else
 		echo "CMake build failed"

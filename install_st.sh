@@ -13,7 +13,7 @@ function install_st() {
 
 	# First, install the build dependencies
 	local -a pre_reqs=(libxft-dev curl make gcc libxext-dev)
-	for p in $(pre_reqs); do
+	for p in ${pre_reqs}; do
 		local check_exists=$(dpkg -s $p)
 		if [[ "${check_exists}" != 0 ]]; then
 			apt-get install -y $p

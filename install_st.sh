@@ -12,7 +12,7 @@ function install_st() {
 	local -r gen_new_config=${3:-0}
 
 	# First, install the build dependencies
-	local -a pre_reqs=(libxft-dev curl make gcc libxext-dev)
+	local -a pre_reqs=(curl make gcc libxext-dev)
 	for p in ${pre_reqs}; do
 		local check_exists=$(dpkg -s $p)
 		if [[ "${check_exists}" != 0 ]]; then

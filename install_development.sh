@@ -12,7 +12,6 @@ apt-get install -y       \
         libpython-dev    \
         cppcheck         \
         make             \
-        ninja-build      \
         build-essential  \
         libglu1-mesa-dev \
         libssl-dev       \
@@ -23,6 +22,7 @@ apt-get install -y       \
         inputplug        \
         python-rosdep python-rosinstall-generator python-wstool python-rosinstall \
 
+   # ninja-build      \
    # libXt            \
    # libXNVCtrl       \
    # libxt-dev        \

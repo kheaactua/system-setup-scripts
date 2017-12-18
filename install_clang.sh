@@ -17,11 +17,11 @@ function getPriority() {
 	local -r bin=$1
 
 	query=$(update-alternatives --display $bin | \
-	           grep priority |                   \
-				  cut -d' ' -f 4 |                  \
-				  sort |                            \
-				  tail -n 1                         \
-	       )
+		  grep priority |                         \
+		  cut -d' ' -f 4 |                        \
+		  sort |                                  \
+		  tail -n 1                               \
+	 )
 	echo $query
 }
 
@@ -94,8 +94,12 @@ function install_version_bin() {
 	local fname=clang+llvm-${v}-x86_64-linux-gnu-ubuntu-$(getIssue).tar.xz
 	local dest=${dest_base}/${fname/.tar.xz/}
 
-	if [[ ! -e ${tmp_dest}/${fname} ]]; then
-		wget -O ${tmp_dest}/${fname} http://releases.llvm.org/${v}/${fname}
+	if [[ ! -e "${tmp_dest}/${fname}" || ! -s "${tmp_dest}/${fname}" ]]; then
+		wget -O "${tmp_dest}/${fname}" "http://releases.llvm.org/${v}/${fname}"
+		if [[ ! -s "${tmp_dest}/${fname}" ]]; then
+			echo "Could not download ${fname}"
+			exit -1
+		fi
 	fi
 
 	if [[ ! -e "${dest}" ]]; then

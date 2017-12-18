@@ -107,7 +107,7 @@ function install_version_bin() {
 	fi
 
 	if [[ ! -e "${dest}" ]]; then
-		tar -xavf ${tmp_dest}/${fname} --no-same-permissions -C ${dest_base}/
+		tar -xavf ${tmp_dest}/${fname} --no-same-permissions -C ${dest_base}/ && ( echo "Could not untar ${fname}" || exit -1 )
 	fi;
 
 	# Fix up the permissions

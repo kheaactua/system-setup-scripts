@@ -2,7 +2,7 @@
 
 zmodload zsh/pcre
 
-declare -r VERSION=4.0.0
+declare -r VERSION=5.0.0
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"
@@ -91,7 +91,11 @@ function install_version_bin() {
 	local -r tmp_dest=/tmp
 	local -r dest_base=/usr/local
 
-	local fname=clang+llvm-${v}-x86_64-linux-gnu-ubuntu-$(getIssue).tar.xz
+	if [[ $v =~ 5.* ]]; then
+		local -r fname=clang+llvm-${v}-linux-x86_64-ubuntu$(getIssue).tar.xz
+	else
+		local -r fname=clang+llvm-${v}-x86_64-linux-gnu-ubuntu-$(getIssue).tar.xz
+	fi
 	local dest=${dest_base}/${fname/.tar.xz/}
 
 	if [[ ! -e "${tmp_dest}/${fname}" || ! -s "${tmp_dest}/${fname}" ]]; then

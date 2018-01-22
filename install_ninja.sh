@@ -31,6 +31,6 @@ function install_ninja() {
 	fi
 }
 
-install_ninja v1.7.2
+install_ninja v1.8.2
 
 # vim: ts=3 sw=3 sts=0 noet :

@@ -16,8 +16,13 @@ function install_cmake() {
 	local -r INSTALL_PREFIX=${2:-/usr/local}
 
 	local check_exists=$(dpkg -s libncurses5-dev)
-	if [[ "${check_exists}" != 0 ]]; then
-		apt-get install libncurses5-dev
+	if [[ $? != 0 ]]; then
+		if [ "0" == "$(id -u)" ]; then
+			apt-get install libncurses5-dev
+		else
+			echo "Missing libncurses5-dev" >&2
+			exit 1
+		fi
 	fi
 
 	# Get the source:
@@ -34,6 +39,7 @@ function install_cmake() {
 
 	local flags=""
 	flags="--parallel=4"
+	flags=" --prefix=${INSTALL_PREFIX}"
 
 	# Is ccache available?
 	ccache_path=$(which ccache 2>/dev/null)
@@ -48,12 +54,12 @@ function install_cmake() {
 	local ret=$?
 
 	if [[ "${ret}" != 0 ]]; then
-		echo "CMake build failed"
+		echo "CMake build failed" >&2
 		exit 1;
 	fi
 
 	# if we're root
-	if [ "0" != "$(id -u)" ]; then
+	if [ "0" == "$(id -u)" ]; then
 
 		local -r priority=$(expr $(getPriority cmake) + 1)
 
@@ -67,6 +73,6 @@ function install_cmake() {
 	fi
 }
 
-install_cmake v3.9.1
+install_cmake "${version}" "${prefix}"
 
 # vim: ts=3 sw=3 sts=0 noet :

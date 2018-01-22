@@ -2,6 +2,14 @@
 
 source getPriority.sh
 
+declare -r version=${1:-v3.10.2}
+
+if [ "0" == "$(id -u)" ]; then
+	declare -r prefix=${2:-/usr/local}
+else
+	declare -r prefix=${2:-${HOME}}
+fi
+
 function install_cmake() {
 
 	local -r TAG=$1
@@ -38,7 +46,15 @@ function install_cmake() {
 		&& make install
 
 	local ret=$?
-	if [[ "${ret}" == 0 ]]; then
+
+	if [[ "${ret}" != 0 ]]; then
+		echo "CMake build failed"
+		exit 1;
+	fi
+
+	# if we're root
+	if [ "0" != "$(id -u)" ]; then
+
 		local -r priority=$(expr $(getPriority cmake) + 1)
 
 		   update-alternatives --install /usr/bin/cmake  cmake  ${INSTALL_PREFIX}/bin/cmake  ${priority} \
@@ -47,7 +63,7 @@ function install_cmake() {
 		&& update-alternatives --install /usr/bin/ccmake ccmake ${INSTALL_PREFIX}/bin/ccmake ${priority}
 
 	else
-		echo "CMake build failed"
+		echo "Not setting alternatives (requires root permission)"
 	fi
 }
 

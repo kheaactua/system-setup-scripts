@@ -2,14 +2,27 @@
 
 source getPriority.sh
 
+declare -r version=${1:-v3.10.2}
+
+if [ "0" == "$(id -u)" ]; then
+	declare -r prefix=${2:-/usr/local}
+else
+	declare -r prefix=${2:-${HOME}}
+fi
+
 function install_cmake() {
 
 	local -r TAG=$1
 	local -r INSTALL_PREFIX=${2:-/usr/local}
 
 	local check_exists=$(dpkg -s libncurses5-dev)
-	if [[ "${check_exists}" != 0 ]]; then
-		apt-get install libncurses5-dev
+	if [[ $? != 0 ]]; then
+		if [ "0" == "$(id -u)" ]; then
+			apt-get install libncurses5-dev
+		else
+			echo "Missing libncurses5-dev" >&2
+			exit 1
+		fi
 	fi
 
 	# Get the source:
@@ -26,6 +39,7 @@ function install_cmake() {
 
 	local flags=""
 	flags="--parallel=4"
+	flags=" --prefix=${INSTALL_PREFIX}"
 
 	# Is ccache available?
 	ccache_path=$(which ccache 2>/dev/null)
@@ -38,7 +52,15 @@ function install_cmake() {
 		&& make install
 
 	local ret=$?
-	if [[ "${ret}" == 0 ]]; then
+
+	if [[ "${ret}" != 0 ]]; then
+		echo "CMake build failed" >&2
+		exit 1;
+	fi
+
+	# if we're root
+	if [ "0" == "$(id -u)" ]; then
+
 		local -r priority=$(expr $(getPriority cmake) + 1)
 
 		   update-alternatives --install /usr/bin/cmake  cmake  ${INSTALL_PREFIX}/bin/cmake  ${priority} \
@@ -47,10 +69,10 @@ function install_cmake() {
 		&& update-alternatives --install /usr/bin/ccmake ccmake ${INSTALL_PREFIX}/bin/ccmake ${priority}
 
 	else
-		echo "CMake build failed"
+		echo "Not setting alternatives (requires root permission)"
 	fi
 }
 
-install_cmake v3.9.1
+install_cmake "${version}" "${prefix}"
 
 # vim: ts=3 sw=3 sts=0 noet :

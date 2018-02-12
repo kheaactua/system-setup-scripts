@@ -2,7 +2,7 @@
 
 zmodload zsh/pcre
 
-declare -r VERSION=5.0.0
+declare -r VERSION=5.0.1
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"
@@ -64,9 +64,13 @@ function install_version_apt() {
 	ret=$?
 
 	if [[ "${ret}" != 0 ]]; then
-		wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|apt-key add -
-		echo "deb     http://llvm.org/apt/$(getIssueName)/ llvm-toolchain-$(getIssueName)-${v} main" >> "${list_file}"
-		echo "deb-src http://llvm.org/apt/$(getIssueName)/ llvm-toolchain-$(getIssueName)-${v} main" >> "${list_file}"
+		if [ "0" == "$(id -u)" ]; then
+			wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|apt-key add -
+			echo "deb     http://llvm.org/apt/$(getIssueName)/ llvm-toolchain-$(getIssueName)-${v} main" >> "${list_file}"
+			echo "deb-src http://llvm.org/apt/$(getIssueName)/ llvm-toolchain-$(getIssueName)-${v} main" >> "${list_file}"
+		else
+			echo "Cannot add required key to apt sources"
+		fi
 	fi
 
 	# install the required build dependencies:
@@ -91,7 +95,7 @@ function install_version_bin() {
 	local -r tmp_dest=/tmp
 	local -r dest_base=/usr/local
 
-	if [[ $v =~ 5.* ]]; then
+	if [[ $v =~ 5.0.0 ]]; then
 		local -r fname=clang+llvm-${v}-linux-x86_64-ubuntu$(getIssue).tar.xz
 	else
 		local -r fname=clang+llvm-${v}-x86_64-linux-gnu-ubuntu-$(getIssue).tar.xz
@@ -110,38 +114,47 @@ function install_version_bin() {
 		tar -xavf ${tmp_dest}/${fname} --no-same-permissions -C ${dest_base}/ && ( echo "Could not untar ${fname}" || exit -1 )
 	fi;
 
-	# Fix up the permissions
-	chown -R root:root ${dest}
-	chmod -R g+r,o+r ${dest}
-	find ${dest} -type d -exec chmod g+x,o+x {} \;
+	#
+	# if we're root
+	if [ "0" == "$(id -u)" ]; then
 
-	# install the required build dependencies:
-	local -r priority=$(expr $(getPriority clang++) + 1)
+		# Fix up the permissions
+		chown -R root:root ${dest}
+		chmod -R g+r,o+r ${dest}
+		find ${dest} -type d -exec chmod g+x,o+x {} \;
 
-	local -r install_path=/usr/local/${fname/.tar.xz/}
-	local -r install_bin_path=${install_path}/bin
-	local -r install_lib_path=${install_path}/lib
+		# install the required build dependencies:
+		local -r priority=$(expr $(getPriority clang++) + 1)
 
-	update-alternatives       --install /usr/bin/clang++         clang++         ${install_bin_path}/clang++         ${priority}  \
-		&& update-alternatives --install /usr/bin/clang           clang           ${install_bin_path}/clang           ${priority}  \
-		&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer ${priority}  \
-		&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy      ${priority}  \
-		&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format    ${priority}  \
-		&& update-alternatives --install /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config     ${priority}  \
+		local -r install_path=/usr/local/${fname/.tar.xz/}
+		local -r install_bin_path=${install_path}/bin
+		local -r install_lib_path=${install_path}/lib
+
+		update-alternatives       --install /usr/bin/clang++         clang++         ${install_bin_path}/clang++         ${priority}  \
+			&& update-alternatives --install /usr/bin/clang           clang           ${install_bin_path}/clang           ${priority}  \
+			&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer ${priority}  \
+			&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy      ${priority}  \
+			&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format    ${priority}  \
+			&& update-alternatives --install /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config     ${priority}  \
 
 
-	# Depending on what we chose to download, this mightn't exist.
-	if [[ -e ${install_bin_path}/lldb-server ]]; then
-		update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server     ${priority}
+		# Depending on what we chose to download, this mightn't exist.
+		if [[ -e ${install_bin_path}/lldb-server ]]; then
+			update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server     ${priority}
+		fi
+
+
+		# I don't know if this is a terrible idea, but, it'll probably work....
+		local clanglibs;
+		clanglibs=($(find ${install_lib_path} -iname 'libclang.so*'))
+		for l in ${clanglibs}; do
+			local libname=$(basename $l)
+			update-alternatives --install /usr/lib/x86_64-linux-gnu/${libname} ${libname} ${install_lib_path}/${libname} ${priority}
+		done
+
+	else
+		echo "Not setting alternatives (requires root permission)"
 	fi
-
-	# I don't know if this is a terrible idea, but, it'll probably work....
-	local clanglibs;
-	clanglibs=($(find ${install_lib_path} -iname 'libclang.so*'))
-	for l in ${clanglibs}; do
-		local libname=$(basename $l)
-		update-alternatives --install /usr/lib/x86_64-linux-gnu/${libname} ${libname} ${install_lib_path}/${libname} ${priority}
-	done
 
 }
 

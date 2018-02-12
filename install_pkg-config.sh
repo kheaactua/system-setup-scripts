@@ -12,8 +12,8 @@ fi
 
 function install_pkgconfig() {
 
-	local -r TAG=$1
-	local -r INSTALL_PREFIX=${2:-/usr/local}
+	local -r TAG=${1:-${version}}
+	local -r INSTALL_PREFIX=${2:-${prefix}}
 
 	# Get the source:
 	if [[ ! -e "${INSTALL_PREFIX}/src/pkg-config" ]]; then

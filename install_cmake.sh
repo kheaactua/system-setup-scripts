@@ -15,15 +15,18 @@ function install_cmake() {
 	local -r TAG=$1
 	local -r INSTALL_PREFIX=${2:-/usr/local}
 
-	local check_exists=$(dpkg -s libncurses5-dev)
-	if [[ $? != 0 ]]; then
-		if [ "0" == "$(id -u)" ]; then
-			apt-get install libncurses5-dev
-		else
-			echo "Missing libncurses5-dev" >&2
-			exit 1
+	local pkgs=(libncurses5-dev libssl-dev)
+	for p in $pkgs; do
+		local check_exists=$(dpkg -s $p)
+		if [[ $? != 0 ]]; then
+			if [ "0" == "$(id -u)" ]; then
+				apt-get install -f $p
+			else
+				echo "Missing $p" >&2
+				exit 1
+			fi
 		fi
-	fi
+	done
 
 	# Get the source:
 	if [[ ! -e "${INSTALL_PREFIX}/src/CMake" ]]; then
@@ -48,7 +51,7 @@ function install_cmake() {
 	fi
 
 	./bootstrap ${flags}             \
-		&& make                       \
+		&& make -j 3                  \
 		&& make install
 
 	local ret=$?

@@ -49,6 +49,6 @@ function install_pkgconfig() {
 	fi
 }
 
-# install_pkgconfig "${version}" "${prefix}"
+install_pkgconfig "${version}" "${prefix}"
 
 # vim: ts=3 sw=3 sts=0 noet :

@@ -116,11 +116,11 @@ function install_version_bin() {
 
 	#
 	# if we're root
-	if [ "0" == "$(id -u)" ]; then
+	if [[ "0" == "$(id -u)" ]]; then
 
 		# Fix up the permissions
-		chown -R root:root ${dest}
-		chmod -R g+r,o+r ${dest}
+		chown -R root:root "${dest}"
+		chmod -R g+r,o+r "${dest}"
 		find ${dest} -type d -exec chmod g+x,o+x {} \;
 
 		# install the required build dependencies:

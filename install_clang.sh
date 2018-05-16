@@ -87,7 +87,6 @@ function install_version_bin() {
 	local -r v=$1;
 	local -r tmp_dest=/tmp
 	local -r dest_base=/usr/local
-	local -r install_method="modules"
 
 	if [[ $v =~ 5.0.0 ]]; then
 		local -r fname=clang+llvm-${v}-linux-x86_64-ubuntu$(getIssue).tar.xz
@@ -108,7 +107,7 @@ function install_version_bin() {
 		tar -xavf ${tmp_dest}/${fname} --no-same-permissions -C ${dest_base}/ && ( echo "Could not untar ${fname}" || exit -1 )
 	fi
 
-	if [[ "alternatives" == "${install_method}" ]]; then
+	# Install alternatives (we need clang to be in a standard place)
 
 		# if we're root
 		if [[ "0" == "$(id -u)" ]]; then
@@ -150,7 +149,8 @@ function install_version_bin() {
 			echo "Not setting alternatives (requires root permission)"
 		fi
 
-	elif [[ "modules" == "${install_method}" ]]; then
+	# Install module file (so we can load everything we need for clang)
+
 		if [[ "0" == "$(id -u)" ]]; then
 			dest=/usr/share/modules/modulefiles
 		else
@@ -162,10 +162,6 @@ function install_version_bin() {
 
 		echo "Installing module files to ${dest}"
 		cp -r modules/clang "${dest}"
-
-	else
-		echo "Unsure what install methos to use"
-	fi
 
 }
 

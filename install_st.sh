@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 declare INSTALL_PREFIX=/usr/local
-declare ST_TAG=0.7
+declare ST_TAG=0.8.1
 
 # This script downloads, configures, and builds the suckless
 # terminal
@@ -12,27 +12,40 @@ function install_st() {
 	local -r gen_new_config=${3:-0}
 
 	# First, install the build dependencies
-	local -a pre_reqs=(curl make gcc libxext-dev python-dev libxft-dev libx11-dev x11proto-core-dev libxt-dev)
-	for p in ${pre_reqs}; do
-		local check_exists=$(dpkg -s $p)
-		if [[ "${check_exists}" != 0 ]]; then
-			apt-get install -y $p
-		fi
-	done
+	if [[ 'root' == "$(whoami)" ]]; then
+		local -a pre_reqs=(curl make gcc libxext-dev python-dev libxft-dev libx11-dev x11proto-core-dev libxt-dev)
+		for p in ${pre_reqs}; do
+			local check_exists=$(dpkg -s $p)
+			if [[ "${check_exists}" != 0 ]]; then
+				apt-get install -y $p
+			fi
+		done
+	else
+		echo "Skipping installing system requirements"
+	fi
 
 	# Get the source:
-	cd ${prefix}/src
+	if [[ ! -e "${prefix}/src" ]]; then
+		echo "Creating prefix directory ${prefix}"
+		mkdir -p "${prefix}/src"
+	fi
+
+	echo "Downloading source to ${prefix}/src"
+	cd "${prefix}/src"
 	if [[ ! -d "st" ]]; then
 		git clone http://git.suckless.org/st/
 	fi
 	cd st
 
 	git fetch
+	git clean -f
+	git checkout .
 	git checkout ${tag}
 
 	# Generate or download config
 	if [[ "${gen_new_config}" == 1 ]]; then
-		# Apply patches
+		echo "Applying patches to config file"
+
 		local -a patches
 
 		# Solarized
@@ -43,7 +56,7 @@ function install_st() {
 			if [[ ! -e "$(basename $p)" ]]; then
 				wget $p
 			fi
-			patch < $(basename $p)
+			patch < "$(basename $p)"
 		done;
 
 		# /Apply Patches
@@ -53,21 +66,26 @@ function install_st() {
 		make
 	else
 		# Get my custom config from github:
-		if [[ ! -e ~/dotfiles/st/config.h ]]; then
-			ln -s ~/dotfiles/st/config.h ./
+		if [[ -e ~/dotfiles/st/config.h ]]; then
+			echo "Symlinking local config.h into directory"
+			if [[ ! -e config.h ]]; then
+				ln -s ~/dotfiles/st/config.h ./
+			fi
 		else
+			echo "Downloading config.h from github"
 			curl -fLo config.h https://raw.githubusercontent.com/kheaactua/dotfiles/master/st/config.h
 		fi
 	fi
 
 	if [[ -e config.h ]]; then
-		make clean install
+		make
+		# make PREFIX="${prefix}" clean install
 	else
 		echo "Could not download config.h" >&2
 		exit -1;
 	fi
 }
 
-install_st ${INSTALL_PREFIX} ${ST_TAG}
+install_st "${INSTALL_PREFIX}" "${ST_TAG}"
 
 # vim: ts=3 sw=3 sts=0 noet ffs=unix :

@@ -13,7 +13,7 @@ function install_st() {
 
 	# First, install the build dependencies
 	if [[ 'root' == "$(whoami)" ]]; then
-		local -a pre_reqs=(curl make gcc libxext-dev python-dev libxft-dev libx11-dev x11proto-core-dev libxt-dev)
+		local -a pre_reqs=(curl make gcc libxext-dev python-dev libxft-dev libx11-dev x11proto-core-dev libxt-dev libfontconfig1-dev libfreetype6-dev)
 		for p in ${pre_reqs}; do
 			local check_exists=$(dpkg -s $p)
 			if [[ "${check_exists}" != 0 ]]; then

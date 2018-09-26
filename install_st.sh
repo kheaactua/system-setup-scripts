@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/zsh -e
 
 declare INSTALL_PREFIX=/usr/local
 declare ST_TAG=0.8.1
@@ -7,15 +7,16 @@ declare ST_TAG=0.8.1
 # terminal
 function install_st() {
 
-	local -r prefix=${1:-/usr/local}
-	local -r tag=$2
-	local -r gen_new_config=${3:-0}
+	local -r prefix="${1:-/usr/local}"
+	local -r tag="$2"
+	local -r gen_new_config="${3:-0}"
 
 	# First, install the build dependencies
 	if [[ 'root' == "$(whoami)" ]]; then
-		local -a pre_reqs=(curl make gcc libxext-dev python-dev libxft-dev libx11-dev x11proto-core-dev libxt-dev libfontconfig1-dev libfreetype6-dev)
+		typeset -a pre_reqs
+		pre_reqs=("curl" "make" "gcc" "libxext-dev" "python-dev" "libxft-dev" "libx11-dev" "x11proto-core-dev" "libxt-dev" "libfontconfig1-dev" "libfreetype6-dev")
 		for p in ${pre_reqs}; do
-			local check_exists=$(dpkg -s $p)
+			local check_exists="$(dpkg -s $p)"
 			if [[ "${check_exists}" != 0 ]]; then
 				apt-get install -y $p
 			fi

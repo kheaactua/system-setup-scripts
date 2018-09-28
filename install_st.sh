@@ -80,7 +80,7 @@ function install_st() {
 
 	if [[ -e config.h ]]; then
 		make
-		# make PREFIX="${prefix}" clean install
+		make PREFIX="${prefix}" clean install
 	else
 		echo "Could not download config.h" >&2
 		exit -1;

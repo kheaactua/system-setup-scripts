@@ -34,7 +34,8 @@ function install_tmux() {
 	fi
 
 	cd "${INSTALL_PREFIX}/src/tmux"
-	git checkout ${TAG}
+	git reset --hard
+	git checkout "${TAG}"
 	git pull
 
 	sh autogen.sh      \
@@ -51,6 +52,6 @@ function install_tmux() {
 	fi
 }
 
-install_tmux 2.7
+install_tmux 2.8
 
 # vim: ts=3 sw=3 sts=0 noet :

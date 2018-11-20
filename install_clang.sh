@@ -2,7 +2,7 @@
 
 zmodload zsh/pcre
 
-declare -r VERSION=6.0.1
+declare -r VERSION=7.0.0
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"
@@ -130,6 +130,7 @@ function install_version_bin() {
 				&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy      ${priority}  \
 				&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format    ${priority}  \
 				&& update-alternatives --install /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config     ${priority}  \
+				&& update-alternatives --install /usr/bin/ld              ld              ${install_bin_path}/ld.lld          ${priority}  \
 
 
 			# Depending on what we chose to download, this mightn't exist.
@@ -162,7 +163,6 @@ function install_version_bin() {
 
 		echo "Installing module files to ${dest}"
 		cp -r modules/clang "${dest}"
-
 }
 
 function install_version() {

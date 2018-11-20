@@ -16,7 +16,6 @@ function getPriority() {
 }
 
 function install_tmux() {
-
 	local -r TAG=$1
 
 	# Build dependencies

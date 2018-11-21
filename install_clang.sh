@@ -73,14 +73,14 @@ function install_version_apt() {
 
 		apt-get update \
 			&& apt-get install -y clang-${v} clang-tidy-${v} libclang-${v}-dev libclang-common-${v}-dev libclang1-${v} libllvm${v} lldb-${v} clang-format-${v} libncurses5-dev libssl-dev \
-			&&	update-alternatives --install /usr/bin/clang++         clang++         ${install_path}/clang++-${v}         ${priority}  \
-			&& update-alternatives --install /usr/bin/clang           clang           ${install_path}/clang++-${v}         ${priority}  \
-			&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer ${install_path}/llvm-symbolizer-${v} ${priority}  \
-			&& update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_path}/lldb-server-${v}     ${priority}  \
-			&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      ${install_path}/clang-tidy-${v}      ${priority}  \
-			&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_path}/clang-format-${v}    ${priority}  \
-			&& update-alternatives --install /usr/bin/llvm-config     llvm-config     ${install_path}/llvm-config          ${priority}  \
-
+			&&	update-alternatives \
+				--install /usr/bin/clang           clang           ${install_bin_path}/clang-${v}           ${priority} \
+				--slave   /usr/bin/clang++         clang++         ${install_bin_path}/clang++-${v}                     \
+				--slave   /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer-${v}             \
+				--slave   /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server-${v}                 \
+				--slave   /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy-${v}                  \
+				--slave   /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format-${v}                \
+				--slave   /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config
 }
 
 function install_version_bin() {
@@ -123,14 +123,18 @@ function install_version_bin() {
 			local -r install_path=/usr/local/${fname/.tar.xz/}
 			local -r install_bin_path=${install_path}/bin
 			local -r install_lib_path=${install_path}/lib
+			local -r install_share_path=${install_path}/share
 
-			update-alternatives       --install /usr/bin/clang++         clang++         ${install_bin_path}/clang++         ${priority}  \
-				&& update-alternatives --install /usr/bin/clang           clang           ${install_bin_path}/clang           ${priority}  \
-				&& update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer ${priority}  \
-				&& update-alternatives --install /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy      ${priority}  \
-				&& update-alternatives --install /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format    ${priority}  \
-				&& update-alternatives --install /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config     ${priority}  \
-				&& update-alternatives --install /usr/bin/ld              ld              ${install_bin_path}/ld.lld          ${priority}  \
+			update-alternatives                                                                                   \
+				--install /usr/bin/clang           clang           ${install_bin_path}/clang           ${priority} \
+				--slave   /usr/bin/clang++         clang++         ${install_bin_path}/clang++                     \
+				--slave   /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer             \
+				--slave   /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy                  \
+				--slave   /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format                \
+				--slave   /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config                 \
+				--slave   /usr/share/clang/clang-format.py clang-format.py ${install_share_path}/clang/clang-format.py \
+			&& update-alternatives                                                                                \
+				--install /usr/bin/ld              ld              ${install_bin_path}/ld.lld          ${priority} \
 
 
 			# Depending on what we chose to download, this mightn't exist.

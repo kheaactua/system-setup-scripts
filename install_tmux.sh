@@ -35,6 +35,7 @@ function install_tmux() {
 
 	cd "${INSTALL_PREFIX}/src/tmux"
 	git reset --hard
+	git fetch origin
 	git checkout "${TAG}"
 	git pull
 

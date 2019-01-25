@@ -34,11 +34,12 @@ function install_neovim() {
 	which xsel > /dev/null || apt-get install -y xsel
 
 	# Then install the python modules:
-	pip install neovim                                            \
-		&& update-alternatives --install /usr/bin/vim    vim    /usr/bin/nvim "$(expr $(getPriority vim)    + 1)" \
-		&& update-alternatives --install /usr/bin/vi     vi     /usr/bin/nvim "$(expr $(getPriority vi)     + 1)" \
-		&& update-alternatives --install /usr/bin/editor editor /usr/bin/nvim "$(expr $(getPriority editor) + 1)" \
-
+	pip2 install neovim                                                         \
+		&& pip3 install neovim                                                   \
+		&& update-alternatives \
+		   --install /usr/bin/vi     vi     /usr/bin/nvim 60 \
+		   --slave   /usr/bin/vim    vim    /usr/bin/nvim 60 \
+		   --slave   /usr/bin/editor editor /usr/bin/nvim 60
 }
 
 install_neovim

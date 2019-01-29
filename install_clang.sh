@@ -31,6 +31,8 @@ function getIssueName() {
 		echo "trusty"
 	elif [[ "${issue}" =~ 16.04* ]]; then
 		echo "xenial"
+	elif [[ "${issue}" =~ 18.04* ]]; then
+		echo "bionic"
 	else
 		echo "Unknown issue!" >&2
 		exit 1
@@ -43,6 +45,8 @@ function getIssue() {
 		echo "14.04"
 	elif [[ "${issue}" =~ 16.04* ]]; then
 		echo "16.04"
+	elif [[ "${issue}" =~ 18.04* ]]; then
+		echo "18.04"
 	else
 		echo "Unknown issue!" >&2
 		exit 1

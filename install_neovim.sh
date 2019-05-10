@@ -36,10 +36,9 @@ function install_neovim() {
 	# Then install the python modules:
 	pip2 install neovim                                                         \
 		&& pip3 install neovim                                                   \
-		&& update-alternatives \
-		   --install /usr/bin/vi     vi     /usr/bin/nvim 60 \
-		   --slave   /usr/bin/vim    vim    /usr/bin/nvim 60 \
-		   --slave   /usr/bin/editor editor /usr/bin/nvim 60
+		&& update-alternatives --install /usr/bin/vi     vi     /usr/bin/nvim 60 \
+		&& update-alternatives --install /usr/bin/vim    vim     /usr/bin/nvim 60 \
+		&& update-alternatives --install /usr/bin/editor vim     /usr/bin/nvim 60
 }
 
 install_neovim

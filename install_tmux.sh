@@ -53,6 +53,6 @@ function install_tmux() {
 	fi
 }
 
-install_tmux 2.8
+install_tmux 2.9a
 
 # vim: ts=3 sw=3 sts=0 noet :

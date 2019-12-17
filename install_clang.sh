@@ -2,7 +2,7 @@
 
 zmodload zsh/pcre
 
-declare -r VERSION=8.0.0
+declare -r VERSION=9.0.0
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"
@@ -33,12 +33,17 @@ function getIssueName() {
 		echo "xenial"
 	elif [[ "${issue}" =~ 18.04* ]]; then
 		echo "bionic"
+	elif [[ "${issue}" =~ 19.04* ]]; then
+		echo "disco"
+	elif [[ "${issue}" =~ 19.10* ]]; then
+		echo "eoan"
 	else
 		echo "Unknown issue!" >&2
 		exit 1
 	fi
 }
 
+# TODO: Why didn't I use a regex here?
 function getIssue() {
 	local -r issue="$(cat /etc/issue)"
 	if [[ "${issue}" =~ 14.04* ]]; then
@@ -51,6 +56,26 @@ function getIssue() {
 		echo "Unknown issue!" >&2
 		exit 1
 	fi
+}
+
+function install_with_llvm_script()
+{
+	local -r v=$(echo "9.0.0" | sed 's/\([[:digit:]]\).*/\1/')
+	local -r install_bin_path=/usr/bin
+	local -r priority=$(expr $(getPriority clang++) + 1)
+
+	tmp=$(mktemp -d)
+	wget -O ${tmp}/llvm.sh https://apt.llvm.org/llvm.sh
+		&& chmod +x ${tmp}/llvm.sh
+		&& ${tmp}llvm.sh ${v}
+		&&	update-alternatives \
+			--install /usr/bin/clang           clang           ${install_bin_path}/clang-${v}           ${priority} \
+			--slave   /usr/bin/clang++         clang++         ${install_bin_path}/clang++-${v}                     \
+			--slave   /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer-${v}             \
+			--slave   /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server-${v}                 \
+			--slave   /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy-${v}                  \
+			--slave   /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format-${v}                \
+			--slave   /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config-${v}
 }
 
 function install_version_apt() {
@@ -177,7 +202,8 @@ function install_version() {
 	local -r v=$1;
 
 	# [[ "${v}" -pcre-match "^(\d+\.\d+).*" ]] && install_version_apt $match[1] || echo "Could not read version"
-	install_version_bin $1
+	# install_version_bin $1
+	install_with_llvm_script $1
 }
 
 

@@ -10,37 +10,84 @@ function getPriority() {
 		sort                            | \
 		tail -n 1                         \
 	)
+	if [[ "" == "${query}" ]]; then
+		query=60
+	else
+		query=$(($query+1))
+	fi
 	echo $query
 }
 
-# This script sets up a PPA and installs
-# neovim.
-function install_neovim() {
+function install_neovim_deps()
+{
+	apt-get update
 
+	# The following dependencies are required for
+	# python support in neovim:
+	apt-get install -y python-dev python-pip python3-dev python3-pip
+
+	# This dependency is require for using the system clipboard:
+	which xsel > /dev/null || apt-get install -y xsel
+
+	pip2 install neovim && pip3 install neovim
+}
+
+function install_neovim_alternatives()
+{
+	local -r bin=$1
+	local -r pri=$(getPriority vi)
+
+	update-alternatives    --install /usr/bin/vi     vi     ${bin} ${pri} \
+	&& update-alternatives --install /usr/bin/vim    vim    ${bin} ${pri} \
+	&& update-alternatives --install /usr/bin/editor editor ${bin} ${pri}
+}
+
+function install_neovim()
+{
 	# See if neovim is already installed:
 	if hash nvim 2>/dev/null; then
 	  echo "Neovim already installed"
 	 exit 0
 	fi
 
-	# The following dependencies are required for
-	# python support in neovim:
-	apt-get install -y python-dev python-pip python3-dev python3-pip
-
-	apt-get update
 	apt-get install -y neovim
 
-	# This dependency is require for using the system clipboard:
-	which xsel > /dev/null || apt-get install -y xsel
-
-	# Then install the python modules:
-	pip2 install neovim                                                         \
-		&& pip3 install neovim                                                   \
-		&& update-alternatives --install /usr/bin/vi     vi     /usr/bin/nvim 60 \
-		&& update-alternatives --install /usr/bin/vim    vim     /usr/bin/nvim 60 \
-		&& update-alternatives --install /usr/bin/editor vim     /usr/bin/nvim 60
+	install_neovim_deps \
+	&& install_neovim_alternatives /usr/bin/nvim
 }
 
-install_neovim
+function install_neovim_latest()
+{
+	local -r TAG=$1
+
+	set -x
+	local -r INSTALL_PREFIX=/usr/local
+
+	# Get the source:
+	if [[ ! -d "${INSTALL_PREFIX}/src/neovim" ]]; then
+		mkdir -p "${INSTALL_PREFIX}/src"
+		cd "${INSTALL_PREFIX}/src"
+		git clone https://github.com/neovim/neovim.git
+	fi
+
+	apt-get install -y \
+		cmake           \
+		libtool-bin     \
+
+
+	cd "${INSTALL_PREFIX}/src/neovim"
+	git reset --hard
+	git fetch origin
+	git checkout "${TAG}"
+	git pull
+
+	make CMAKE_BUILD_TYPE=Release  \
+	&& make install                \
+	&& install_neovim_deps         \
+	&& install_neovim_alternatives /usr/local/src/neovim/build/bin/nvim
+}
+
+# install_neovim
+install_neovim_latest 6f073cc
 
 # vim: ts=3 sw=3 sts=0 noet :

@@ -3,24 +3,23 @@
 # This script is used to install a series of tools that
 # I use for software development
 
-apt-get install -y       \
-        g++              \
-        ccache           \
-        distcc           \
-        doxygen          \
-        graphviz         \
-        libpython-dev    \
-        cppcheck         \
-        make             \
-        build-essential  \
-        libglu1-mesa-dev \
-        libssl-dev       \
-        dh-autoreconf    \
-        pkg-config       \
-        libglib2.0-dev   \
-        libbz2-dev       \
-        inputplug        \
-        python-rosdep python-rosinstall-generator python-wstool python-rosinstall \
+apt-get install -y   \
+    g++              \
+    ccache           \
+    distcc           \
+    doxygen          \
+    graphviz         \
+    libpython-dev    \
+    cppcheck         \
+    make             \
+    build-essential  \
+    libglu1-mesa-dev \
+    libssl-dev       \
+    dh-autoreconf    \
+    pkg-config       \
+    libglib2.0-dev   \
+    libbz2-dev       \
+    inputplug        \
 
    # ninja-build      \
    # libXt            \

@@ -16,12 +16,12 @@ function getPriority() {
 	# Which alternative target name to query
 	local -r bin=$1
 
-	query=$(update-alternatives --display $bin | \
-		  grep priority |                         \
-		  cut -d' ' -f 4 |                        \
-		  sort |                                  \
-		  tail -n 1                               \
-	 )
+	query=$(update-alternatives --display $bin     | \
+		  grep priority                             | \
+		  cut -d' ' -f 4                            | \
+		  sort                                      | \
+		  tail -n 1                                   \
+	)
 	echo $query
 }
 
@@ -60,7 +60,7 @@ function getIssue() {
 
 function install_with_llvm_script()
 {
-	local -r v=$(echo "9.0.0" | sed 's/\([[:digit:]]\).*/\1/')
+	local -r v=$(echo "$1" | sed 's/\([[:digit:]]\).*/\1/')
 	local -r install_bin_path=/usr/bin
 	local -r priority=$(expr $(getPriority clang++) + 1)
 
@@ -78,7 +78,8 @@ function install_with_llvm_script()
 			--slave   /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config-${v}
 }
 
-function install_version_apt() {
+function install_version_apt()
+{
 	local -r v=$1;
 
 	# Is this v already in the file?
@@ -114,6 +115,7 @@ function install_version_apt() {
 
 function install_version_bin() {
 	local -r v=$1;
+	local -r major_v=$(echo "$v" | sed 's/\([[:digit:]]\).*/\1/')
 	local -r tmp_dest=/tmp
 	local -r dest_base=/usr/local
 
@@ -147,7 +149,8 @@ function install_version_bin() {
 			find ${dest} -type d -exec chmod g+x,o+x {} \;
 
 			# install the required build dependencies:
-			local -r priority=$(expr $(getPriority clang++) + 1)
+set -x
+			local -r priority=$(expr $(getPriority clang) + 1)
 
 			local -r install_path=/usr/local/${fname/.tar.xz/}
 			local -r install_bin_path=${install_path}/bin

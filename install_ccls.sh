@@ -21,7 +21,7 @@ function getDefaultGccVersion() {
 
 function install_ccls() {
 	local -r v=$(getDefaultGccVersion)
-	if (( "${v}" <= "7" )); then
+	if (( "${v}" < 7 )); then
 		echo -e "Error: gcc7 is required, detected ${v}.  Use the install_gcc-7.sh script to install it and then choose it with\nupdate-alternatives --config gcc"
 		return
 	fi

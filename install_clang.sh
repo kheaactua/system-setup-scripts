@@ -65,9 +65,9 @@ function install_with_llvm_script()
 	local -r priority=$(expr $(getPriority clang++) + 1)
 
 	tmp=$(mktemp -d)
-	wget -O ${tmp}/llvm.sh https://apt.llvm.org/llvm.sh
-		&& chmod +x ${tmp}/llvm.sh
-		&& ${tmp}llvm.sh ${v}
+	wget -O ${tmp}/llvm.sh https://apt.llvm.org/llvm.sh \
+		&& chmod +x ${tmp}/llvm.sh \
+		&& ${tmp}/llvm.sh ${v} \
 		&&	update-alternatives \
 			--install /usr/bin/clang           clang           ${install_bin_path}/clang-${v}           ${priority} \
 			--slave   /usr/bin/clang++         clang++         ${install_bin_path}/clang++-${v}                     \

@@ -42,7 +42,6 @@ function install_ccls() {
 	cmake                                    \
 		-DCMAKE_BUILD_TYPE=Release            \
 		-DCMAKE_INSTALL_PREFIX=/usr/local     \
-		-DCMAKE_CXX_COMPILER=$(realpath $(which clang++)) \
 	&& cmake --build .                       \
 	&& cmake --build . --target install      \
 	&& echo "ccls succesfully installed"

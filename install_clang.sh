@@ -149,7 +149,6 @@ function install_version_bin() {
 			find ${dest} -type d -exec chmod g+x,o+x {} \;
 
 			# install the required build dependencies:
-set -x
 			local -r priority=$(expr $(getPriority clang) + 1)
 
 			local -r install_path=/usr/local/${fname/.tar.xz/}
@@ -168,10 +167,11 @@ set -x
 			&& update-alternatives                                                                                \
 				--install /usr/bin/ld              ld              ${install_bin_path}/ld.lld          ${priority} \
 
-
 			# Depending on what we chose to download, this mightn't exist.
 			if [[ -e ${install_bin_path}/lldb-server ]]; then
-				update-alternatives --install /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server     ${priority}
+			update-alternatives                                                                                   \
+				--install /usr/bin/clang           clang           ${install_bin_path}/clang           ${priority} \
+				--slave   /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server
 			fi
 
 			# I don't know if this is a terrible idea, but, it'll probably work....

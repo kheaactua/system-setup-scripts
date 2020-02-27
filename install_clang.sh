@@ -52,6 +52,10 @@ function getIssue() {
 		echo "16.04"
 	elif [[ "${issue}" =~ 18.04* ]]; then
 		echo "18.04"
+	elif [[ "${issue}" =~ 19.04* ]]; then
+		echo "19.04"
+	elif [[ "${issue}" =~ 19.10* ]]; then
+		echo "19.10"
 	else
 		echo "Unknown issue!" >&2
 		exit 1

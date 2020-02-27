@@ -39,6 +39,8 @@ function install_ccls() {
 	git reset --hard
 	git pull
 
+		# -DCMAKE_CXX_COMPILER=$(realpath $(which clang++)) \
+		# -DDEFAULT_RESOURCE_DIRECTORY=$(clang -print-resource-dir) \
 	cmake                                    \
 		-DCMAKE_BUILD_TYPE=Release            \
 		-DCMAKE_INSTALL_PREFIX=/usr/local     \

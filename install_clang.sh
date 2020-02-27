@@ -118,6 +118,7 @@ function install_version_apt()
 }
 
 function install_version_bin() {
+	set -e
 	local -r v=$1;
 	local -r major_v=$(echo "$v" | sed 's/\([[:digit:]]\).*/\1/')
 	local -r tmp_dest=/tmp
@@ -186,6 +187,11 @@ function install_version_bin() {
 				update-alternatives --install /usr/lib/x86_64-linux-gnu/${libname} ${libname} ${install_lib_path}/${libname} ${priority}
 			done
 
+			# clanglibs=($(find ${install_lib_path} -iname 'libclangBasic.a*' -or ))
+			# for l in ${clanglibs}; do
+			# 	ln -s ${install_lib_path}/libclangBasic.a /usr/lib/llvm-${major_v}/lib/libclangBasic.a
+			# done
+
 		else
 			echo "Not setting alternatives (requires root permission)"
 		fi
@@ -209,8 +215,8 @@ function install_version() {
 	local -r v=$1;
 
 	# [[ "${v}" -pcre-match "^(\d+\.\d+).*" ]] && install_version_apt $match[1] || echo "Could not read version"
-	# install_version_bin $1
-	install_with_llvm_script $1
+	install_version_bin $1
+	# install_with_llvm_script $1
 }
 
 

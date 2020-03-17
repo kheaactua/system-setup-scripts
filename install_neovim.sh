@@ -81,6 +81,10 @@ function install_neovim_latest()
 	git checkout "${TAG}"
 	git pull
 
+	# TODO If behind a proxy, make sure http_proxy/https_proxy are set in the
+	#      environment here (for now I've just been manally placing them here.)
+	#      ALternatively I've been experimeting with a .netrc file that might
+	#      help
 	make CMAKE_BUILD_TYPE=Release  \
 	&& make install                \
 	&& install_neovim_deps         \

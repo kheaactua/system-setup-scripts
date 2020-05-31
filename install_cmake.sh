@@ -78,7 +78,7 @@ function install_cmake_from_src()
 
 function install_cmake_from_ppa() {
 	# https://apt.kitware.com/
-	apt-get update && sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget
+	apt-get update && sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget -yq
 
 	wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
 
@@ -88,7 +88,7 @@ function install_cmake_from_ppa() {
 	apt-get install kitware-archive-keyring
 	apt-key --keyring /etc/apt/trusted.gpg del C1F34CDD40CD72DA
 
-	apt install cmake -y
+	apt install cmake -qy
 }
 
 function install_cmake()
@@ -96,7 +96,8 @@ function install_cmake()
 	local -r TAG=$1
 	local -r INSTALL_PREFIX=${2:-/usr/local}
 
-	install_cmake_from_ppa
+	# install_cmake_from_ppa
+	install_cmake_from_src
 }
 
 install_cmake "${version}" "${prefix}"

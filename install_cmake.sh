@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source getPriority.sh
+source $(dirname $0)/getPriority.sh
 
 declare -r version=${1:-v3.17.3}
 

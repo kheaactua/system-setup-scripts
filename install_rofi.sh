@@ -36,7 +36,7 @@ function install_rofi()
   sudo -u "${run_as}" git checkout "${tag}"
   sudo -u "${run_as}" autoreconf -i
   sudo -u "${run_as}" mkdir -p build && cd build
-  sudo -u "${run_as}" ../configure --prefix="${install_prefix}"
+  sudo -u "${run_as}" ../configure --prefix="${install_prefix}" --enable-drun
   sudo -u "${run_as}" make -j \
     && checkinstall -D -y --pkgname rofi --pkgversion "${tag}" --pkggroup x11 make install
 }

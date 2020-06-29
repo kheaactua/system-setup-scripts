@@ -16,7 +16,8 @@ function getPriority() {
 }
 
 function install_tmux() {
-	local -r TAG=$1
+	local -r tag=$1
+	local -r install_prefix=${2:-/usr/local}
 
 	# Build dependencies
 	apt-get install -y automake make gcc libevent-dev libncurses5-dev
@@ -24,19 +25,17 @@ function install_tmux() {
 	# This dependency is required for using the system clipboard:
 	apt-get install -y xsel
 
-	local -r INSTALL_PREFIX=/usr/local
-
 	# Get the source:
-	if [[ ! -d "${INSTALL_PREFIX}/src/tmux" ]]; then
-		mkdir -p "${INSTALL_PREFIX}/src"
-		cd "${INSTALL_PREFIX}/src"
+	if [[ ! -d "${install_prefix}/src/tmux" ]]; then
+		mkdir -p "${install_prefix}/src"
+		cd "${install_prefix}/src"
 		git clone https://github.com/tmux/tmux.git
 	fi
 
-	cd "${INSTALL_PREFIX}/src/tmux"
+	cd "${install_prefix}/src/tmux"
 	git reset --hard
 	git fetch origin
-	git checkout "${TAG}"
+	git checkout "${tag}"
 	git pull
 
 	sh autogen.sh      \
@@ -48,11 +47,11 @@ function install_tmux() {
 	if [[ "${ret}" == 0 ]]; then
 		local -r priority=$(expr $(getPriority tmux) + 1)
 
-		update-alternatives --install /usr/bin/tmux tmux ${INSTALL_PREFIX}/bin/tmux ${priority}
+		update-alternatives --install /usr/bin/tmux tmux "${install_prefix}/bin/tmux" "${priority}"
 
 	fi
 }
 
-install_tmux 3.1
+install_tmux 3.2
 
 # vim: ts=3 sw=3 sts=0 noet :

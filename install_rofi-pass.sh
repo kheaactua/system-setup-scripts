@@ -1,22 +1,34 @@
 #!/bin/bash
 
-# This script downloads and installs rofi-pass,
-# a rofi front end for passwords stored in pass
+declare -r VERSION=2.0.2
+declare -r INSTALL_PREFIX=/usr/local
+declare -r RUN_AS=matt
 
-# First, install the build dependencies
-apt-get install -y make checkinstall
-apt-get install -y xdotool xclip
+function install_rofi_pass()
+{
+  local tag="${1}"
+  local install_prefix=${2:-/usr/local}
+  local run_as="${3:root}"
 
-INSTALL_PREFIX=/usr/local
-ROFI_PASS_VERSION=1.3.1
+  # This script downloads and installs rofi-pass,
+  # a rofi front end for passwords stored in pass
 
-# Get the source:
-if [ ! -d ${INSTALL_PREFIX}/src/rofi-pass ]; then
-  mkdir -p ${INSTALL_PREFIX}/src
-  cd ${INSTALL_PREFIX}/src
-  git clone https://github.com/carnager/rofi-pass.git 
-fi
+  # First, install the build dependencies
+  apt-get install -qy make checkinstall xdotool xclip
 
-cd ${INSTALL_PREFIX}/src/rofi-pass
-git pull
-checkinstall -D -y --pkgname rofi-pass --pkgversion ${ROFI_PASS_VERSION} --pkggroup x11 make install
+  # Get the source:
+  if [ ! -d "${install_prefix}/src/rofi-pass" ]; then
+    mkdir -p "${install_prefix}/src/rofi-pass"
+    cd "${install_prefix}/src/rofi-pass"
+    chown "${run_as}:${run_as}" "${install_prefix}/src/rofi-pass"
+    sudo -H -u "${run_as}" git clone https://github.com/carnager/rofi-pass.git . || exit 1
+  fi
+
+  cd "${install_prefix}/src/rofi-pass"
+  git pull
+  checkinstall -D -y --pkgname rofi-pass --pkgversion "${tag}" --pkggroup x11 make install
+}
+
+install_rofi_pass "${VERSION}" "${INSTALL_PREFIX}" "${RUN_AS}"
+
+# vim: ts=2 sw=2 sts=0 expandtab :

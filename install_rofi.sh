@@ -15,9 +15,9 @@ function install_rofi()
   # demnu
 
   # First, install the build dependencies
-  apt install -y \
+  apt install -qy \
     git make gcc checkinstall autoconf automake pkg-config
-  apt install -y \
+  apt install -qy \
     libxinerama-dev libxft-dev libpango1.0-dev libcairo2-dev \
     libpangocairo-1.0-0 libglib2.0-dev libx11-dev libstartup-notification0-dev \
     bison flex libxkbcommon-x11-0 libxkbcommon-dev libxkbcommon-x11-dev \

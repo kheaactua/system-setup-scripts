@@ -1,5 +1,18 @@
 #!/bin/bash
 
+function install_nvidia_docker()
+{
+  # Instructions from https://github.com/NVIDIA/nvidia-docker
+
+  # Add the package repositories
+  distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+  curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
+  curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | tee /etc/apt/sources.list.d/nvidia-docker.list
+
+  apt-get update && apt-get install -qy nvidia-container-toolkit
+  systemctl restart docker
+}
+
 function install_docker_service()
 {
   # Run's the installation recommended by
@@ -27,6 +40,8 @@ stable"
 
 	apt-get update \
   && apt-get install -qy docker-ce docker-ce-cli containerd.io
+
+  install_nvidia_docker
 }
 
 install_docker_service

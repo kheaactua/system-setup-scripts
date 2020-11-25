@@ -23,7 +23,7 @@ function install_i3lock_fancy_rapid()
   fi
 
   cd "${install_prefix}/src/i3lock-fancy-rapid"
-  sudo -u "${run_as}" make -j
+  sudo -E -u "${run_as}" make -j
   cp i3lock-fancy-rapid "${install_prefix}/bin/"
   chown root "${install_prefix}/bin/i3lock-fancy-rapid"
 }

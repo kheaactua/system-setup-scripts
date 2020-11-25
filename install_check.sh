@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -r VERSION=0.15.0
+declare -r VERSION=0.15.2
 declare -r INSTALL_PREFIX=/usr/local
 declare -r RUN_AS=matt
 
@@ -12,7 +12,7 @@ function install_check()
 
   # First, install the build dependencies
   apt install -y \
-    git make gcc checkinstall autoconf automake pkg-config
+    git make gcc checkinstall autoconf automake pkg-config texinfo
 
   # Get the source:
   if [ ! -d "${install_prefix}/src/check" ]; then
@@ -23,15 +23,11 @@ function install_check()
   fi
 
   cd "${install_prefix}/src/check"
-  sudo -u "${run_as}" git fetch --tags
-  sudo -u "${run_as}" git checkout "${tag}"
-  sudo -u "${run_as}" autoreconf -i
-  sudo -u "${run_as}" mkdir -p build && cd build
-  sudo -u "${run_as}" ../configure --prefix="${install_prefix}"
-  sudo -u "${run_as}" make \
-    && sudo -u "${run_as}" check \
-    && sudo -u "${run_as}" install \
-    && sudo -u "${run_as}" ldconfig
+  sudo -E -u "${run_as}" git fetch --tags
+  sudo -E -u "${run_as}" git checkout "${tag}"
+  sudo -E -u "${run_as}" cmake -Bbuild -H. \
+    && sudo -E -u "${run_as}" cmake --build build \
+    && cmake --install build
 }
 
 install_check "${VERSION}" "${INSTALL_PREFIX}" "${RUN_AS}"

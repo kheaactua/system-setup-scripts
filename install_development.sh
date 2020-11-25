@@ -9,7 +9,7 @@ apt-get install -y   \
     distcc           \
     doxygen          \
     graphviz         \
-    libpython-dev    \
+    libpython3-dev   \
     cppcheck         \
     make             \
     build-essential  \

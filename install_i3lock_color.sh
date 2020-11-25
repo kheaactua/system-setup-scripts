@@ -10,13 +10,8 @@ function install_i3lock_color()
   local install_prefix=${2:-/usr/local}
   local run_as="${3:root}"
 
-  # # First, install the build dependencies
-  # apt install -y                                                              \
-  #   pkg-config libpam0g-dev libcairo2-dev libfontconfig1-dev                  \
-  #   libxcb-composite0-dev libev-dev libx11-xcb-dev libxcb-xkb-dev             \
-  #   libxcb-xinerama0-dev libxcb-randr0-dev libxcb-image0-dev libxcb-util-dev  \
-  #   libxcb-xrm-dev libxkbcommon-dev libxkbcommon-x11-dev libjpeg-dev git make \
-  #   gcc autoconf automake
+  # First, install the build dependencies
+  apt install -qy libjpeg-dev
 
   # Get the source:
   if [ ! -d "${install_prefix}/src/i3lock-color" ]; then
@@ -27,7 +22,7 @@ function install_i3lock_color()
   fi
 
   cd "${install_prefix}/src/i3lock-color"
-  # sudo -u "${run_as}" ./build.sh
+  # sudo -E -u "${run_as}" ./build.sh
   chmod +x install-i3lock-color.sh
 
   sed -i "s#--prefix=/usr#--prefix=${install_prefix}#" install-i3lock-color.sh

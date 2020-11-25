@@ -21,7 +21,7 @@ function install_rofi_pass()
     mkdir -p "${install_prefix}/src/rofi-pass"
     cd "${install_prefix}/src/rofi-pass"
     chown "${run_as}:${run_as}" "${install_prefix}/src/rofi-pass"
-    sudo -H -u "${run_as}" git clone https://github.com/carnager/rofi-pass.git . || exit 1
+    sudo -E -H -u "${run_as}" git clone https://github.com/carnager/rofi-pass.git . || exit 1
   fi
 
   cd "${install_prefix}/src/rofi-pass"

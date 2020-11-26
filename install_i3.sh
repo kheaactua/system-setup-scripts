@@ -4,7 +4,7 @@ function install_i3()
 {
     add-apt-repository -y ppa:kgilmer/speed-ricer
     apt-get update
-    apt install -qy i3-gaps i3lock
+    apt install -qy i3-gaps i3lock feh
 
     ./install_check.sh
     ./install_rofi.sh

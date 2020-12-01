@@ -8,7 +8,7 @@ function install_rofi()
 {
   local tag="${1}"
   local install_prefix=${2:-/usr/local}
-  local run_as="${3:root}"
+  local run_as="${3:-matt}"
 
   # This script downloads, configures, and builds rofi,
   # a window launcher that can be used with i3 instead of

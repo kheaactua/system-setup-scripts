@@ -21,31 +21,35 @@ function getDefaultGccVersion() {
 
 function install_ccls() {
 	local -r v=$(getDefaultGccVersion)
+	local -r INSTALL_PREFIX=${1:-/usr/local}; shift
+	local run_as="${1:-matt}"
+
 	if (( "${v}" < 7 )); then
 		echo -e "Error: gcc7 is required, detected ${v}.  Use the install_gcc-7.sh script to install it and then choose it with\nupdate-alternatives --config gcc"
 		return
 	fi
 
-	local -r INSTALL_PREFIX=/usr/local
-
 	# Get the source:
 	if [[ ! -d "${INSTALL_PREFIX}/src/ccls" ]]; then
 		mkdir -p "${INSTALL_PREFIX}/src"
-		cd "${INSTALL_PREFIX}/src" \
-		&& git clone --depth=1 --recursive https://github.com/MaskRay/ccls
+		cd "${INSTALL_ke PREFIX}/src" \
+			&& git clone --depth=1 --recursive https://github.com/MaskRay/ccls
+		 chown -R "${run_as}": "${INSTALL_PREFIX}/src/ccls"
 	fi
 
 	cd "${INSTALL_PREFIX}/src/ccls"
-	git reset --hard
-	git pull
+	sudo -E -u "${run_as}" git reset --hard
+	sudo -E -u "${run_as}" git pull
 
 		# -DCMAKE_CXX_COMPILER=$(realpath $(which clang++)) \
 		# -DDEFAULT_RESOURCE_DIRECTORY=$(clang -print-resource-dir) \
-	cmake                                    \
-		-DCMAKE_BUILD_TYPE=Release            \
-		-DCMAKE_INSTALL_PREFIX=/usr/local     \
-	&& cmake --build .                       \
-	&& cmake --build . --target install      \
+	sudo -E -u "${run_as}" cmake                \
+		-Bbld                                    \
+		-H.                                      \
+		-DCMAKE_BUILD_TYPE=Release               \
+		-DCMAKE_INSTALL_PREFIX=/usr/local        \
+	&& sudo -E -u "${run_as}" cmake --build bld \
+	&& cmake --build bld --target install       \
 	&& echo "ccls succesfully installed"
 }
 

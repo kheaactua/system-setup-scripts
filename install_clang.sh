@@ -2,7 +2,7 @@
 
 zmodload zsh/pcre
 
-declare -r VERSION=10.0.0
+declare -r VERSION=11.0.0
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"
@@ -26,40 +26,11 @@ function getPriority() {
 }
 
 function getIssueName() {
-	local -r issue="$(cat /etc/issue)"
-	if [[ "${issue}" =~ 14.04* ]]; then
-		echo "trusty"
-	elif [[ "${issue}" =~ 16.04* ]]; then
-		echo "xenial"
-	elif [[ "${issue}" =~ 18.04* ]]; then
-		echo "bionic"
-	elif [[ "${issue}" =~ 19.04* ]]; then
-		echo "disco"
-	elif [[ "${issue}" =~ 19.10* ]]; then
-		echo "eoan"
-	else
-		echo "Unknown issue!" >&2
-		exit 1
-	fi
+	echo $(lsb_release -cs)
 }
 
-# TODO: Why didn't I use a regex here?
 function getIssue() {
-	local -r issue="$(cat /etc/issue)"
-	if [[ "${issue}" =~ 14.04* ]]; then
-		echo "14.04"
-	elif [[ "${issue}" =~ 16.04* ]]; then
-		echo "16.04"
-	elif [[ "${issue}" =~ 18.04* ]]; then
-		echo "18.04"
-	elif [[ "${issue}" =~ 19.04* ]]; then
-		echo "19.04"
-	elif [[ "${issue}" =~ 19.10* ]]; then
-		echo "19.10"
-	else
-		echo "Unknown issue!" >&2
-		exit 1
-	fi
+	echo $(lsb_release -rs)
 }
 
 function install_with_llvm_script()
@@ -68,26 +39,27 @@ function install_with_llvm_script()
 	local -r install_bin_path=/usr/bin
 	local -r priority=$(expr $(getPriority clang) + 1)
 
+	echo "version=$v"
+
 	tmp=$(mktemp -d)
+tmp=/tmp
 	wget -O ${tmp}/llvm.sh https://apt.llvm.org/llvm.sh \
 		&& chmod +x ${tmp}/llvm.sh \
 		&& ${tmp}/llvm.sh "${v}" \
-		&& apt install clang-format clang-tidy -qy
+		&& apt-get install -qy clang-format-${v} clang-tidy-${v} libclang-${v}-dev \
 		&&	update-alternatives \
 			--install /usr/bin/clang           clang           ${install_bin_path}/clang-${v}           ${priority} \
 			--slave   /usr/bin/clang++         clang++         ${install_bin_path}/clang++-${v}                     \
 			--slave   /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer-${v}             \
 			--slave   /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server-${v}                 \
-			--slave   /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config-${v}
-
-	# This don't seem to be installed by the llvm script, so rely on apt to select them
-			# --slave   /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy-${v}                  \
-			# --slave   /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format-${v}                \
+			--slave   /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config-${v}                 \
+			--slave   /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy-${v}                  \
+			--slave   /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format-${v}                \
 }
 
 function install_version_apt()
 {
-	local -r v=$1;
+	local -r v="${1}"
 
 	# Is this v already in the file?
 	grep -q "${v}" "${list_file}" 2>&1 > /dev/null;
@@ -215,11 +187,11 @@ function install_version_bin() {
 }
 
 function install_version() {
-	local -r v=$1;
+	local -r v="${1}"
 
 	# [[ "${v}" -pcre-match "^(\d+\.\d+).*" ]] && install_version_apt $match[1] || echo "Could not read version"
 	# install_version_bin $1
-	install_with_llvm_script $1
+	install_with_llvm_script "${1}"
 }
 
 

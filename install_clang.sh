@@ -2,7 +2,7 @@
 
 zmodload zsh/pcre
 
-declare -r VERSION=11.0.0
+declare -r VERSION=11.1.0
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"
@@ -42,7 +42,6 @@ function install_with_llvm_script()
 	echo "version=$v"
 
 	tmp=$(mktemp -d)
-tmp=/tmp
 	wget -O ${tmp}/llvm.sh https://apt.llvm.org/llvm.sh \
 		&& chmod +x ${tmp}/llvm.sh \
 		&& ${tmp}/llvm.sh "${v}" \
@@ -55,6 +54,8 @@ tmp=/tmp
 			--slave   /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config-${v}                 \
 			--slave   /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy-${v}                  \
 			--slave   /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format-${v}                \
+			--slave   /usr/bin/clangd          clangd          ${install_bin_path}/clangd-${v}                      \
+
 }
 
 function install_version_apt()

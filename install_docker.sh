@@ -41,6 +41,9 @@ stable"
 	apt-get update \
   && apt-get install -qy docker-ce docker-ce-cli containerd.io
 
+  # Credential Helper, my config files use it
+  apt-get install -qy golang-docker-credential-helpers
+
   install_nvidia_docker
 }
 

@@ -29,7 +29,7 @@ function install_neovim_deps()
 	# This dependency is require for using the system clipboard:
 	which xsel > /dev/null || apt-get install -y xsel
 
-	pip2 install neovim && pip3 install neovim
+	pip3 install neovim
 }
 
 function install_neovim_alternatives()
@@ -92,6 +92,6 @@ function install_neovim_latest()
 }
 
 # install_neovim
-install_neovim_latest 6f073cc
+install_neovim_latest 070e084
 
 # vim: ts=3 sw=3 sts=0 noet :

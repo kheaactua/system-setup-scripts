@@ -92,6 +92,6 @@ function install_neovim_latest()
 }
 
 # install_neovim
-install_neovim_latest 070e084
+install_neovim_latest $(curl -sLH "Accept: application/vnd.github.v3+json" https://api.github.com/repos/neovim/neovim/releases/tags/nightly | jq -r '.target_commitish')
 
 # vim: ts=3 sw=3 sts=0 noet :

@@ -24,7 +24,7 @@ function install_neovim_deps()
 
 	# The following dependencies are required for
 	# python support in neovim:
-	apt-get install -y python-dev python-pip python3-dev python3-pip
+	apt-get install -y python-dev python-pip python3-dev python3-pip gettext
 
 	# This dependency is require for using the system clipboard:
 	which xsel > /dev/null || apt-get install -y xsel

@@ -6,7 +6,7 @@ function pre_install() {
 	apt-get install -y libreadline6-dev
 }
 
-declare -r LUA_VERSION=5.3.3
+declare -r LUA_VERSION=5.4.3
 declare -r INSTALL_PREFIX=/usr/local
 
 function install_version() {

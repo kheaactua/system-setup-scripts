@@ -24,6 +24,7 @@ apt-get install -qy \
   build-essential \
   checkinstall \
   jq \
+  gpgconf gpgv2 \
   unzip
 
 # Upgrade git and repo

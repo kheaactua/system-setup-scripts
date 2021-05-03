@@ -2,7 +2,7 @@
 
 source $(dirname $0)/getPriority.sh
 
-declare -r version=${1:-v3.17.3}
+declare -r version=${1:-v3.20.2}
 
 if [ "0" == "$(id -u)" ]; then
 	declare -r prefix=${2:-/usr/local}
@@ -61,19 +61,7 @@ function install_cmake_from_src()
 		exit 1;
 	fi
 
-	# if we're root
-	if [ "0" == "$(id -u)" ]; then
-
-		local -r priority=$(expr $(getPriority cmake) + 1)
-
-		   update-alternatives --install /usr/bin/cmake  cmake  ${INSTALL_PREFIX}/bin/cmake  ${priority} \
-		&& update-alternatives --install /usr/bin/ctest  ctest  ${INSTALL_PREFIX}/bin/ctest  ${priority} \
-		&& update-alternatives --install /usr/bin/cpack  cpack  ${INSTALL_PREFIX}/bin/cpack  ${priority} \
-		&& update-alternatives --install /usr/bin/ccmake ccmake ${INSTALL_PREFIX}/bin/ccmake ${priority}
-
-	else
-		echo "Not setting alternatives (requires root permission)"
-	fi
+	update_cmake_alternatives "${TAG}" "${INSTALL_PREFIX}"
 }
 
 function install_cmake_from_ppa() {
@@ -91,13 +79,54 @@ function install_cmake_from_ppa() {
 	apt install cmake -qy
 }
 
+function install_cmake_binary() {
+	local -r TAG=$1
+	local -r INSTALL_PREFIX=${2:-/usr/local}
+
+	local tmp=$(mktemp -d)
+	wget -O ${tmp}/cmake_install.sh https://github.com/Kitware/CMake/releases/download/${TAG}/cmake-${TAG##v}-Linux-x86_64.sh \
+	  && chmod u+x ${tmp}/cmake_install.sh \
+	  && ${tmp}/cmake_install.sh --prefix=/usr/local --skip-license \
+	  && rm ${tmp}/cmake_install.sh
+
+	update_cmake_alternatives "${TAG}" "${INSTALL_PREFIX}"
+}
+
+function update_cmake_alternatives() {
+	local -r TAG=$1
+	local -r INSTALL_PREFIX=${2:-/usr/local}
+
+	# if we're root
+	if [ "0" == "$(id -u)" ]; then
+
+		local -r priority=$(expr $(getPriority cmake) + 1)
+
+		   # update-alternatives \
+				# --install /bin/cmake  cmake  ${INSTALL_PREFIX}/bin/cmake  ${priority} \
+				# --slave   /bin/ctest  ctest  ${INSTALL_PREFIX}/bin/ctest  \
+				# --slave   /bin/cpack  cpack  ${INSTALL_PREFIX}/bin/cpack  \
+				# --slave   /bin/ccmake ccmake ${INSTALL_PREFIX}/bin/ccmake
+
+		   update-alternatives --force --install /bin/cmake  cmake  ${INSTALL_PREFIX}/bin/cmake  ${priority} \
+		&& update-alternatives --force --install /bin/ctest  ctest  ${INSTALL_PREFIX}/bin/ctest  ${priority} \
+		&& update-alternatives --force --install /bin/cpack  cpack  ${INSTALL_PREFIX}/bin/cpack  ${priority} \
+		&& update-alternatives --force --install /bin/ccmake ccmake ${INSTALL_PREFIX}/bin/ccmake ${priority}
+
+		echo "Updated alternatives: $(which cmake)"
+
+	else
+		echo "Not setting alternatives (requires root permission)"
+	fi
+}
+
 function install_cmake()
 {
 	local -r TAG=$1
 	local -r INSTALL_PREFIX=${2:-/usr/local}
 
 	# install_cmake_from_ppa
-	install_cmake_from_src
+	# install_cmake_from_src "${TAG}" "${INSTALL_PREFIX}"
+	install_cmake_binary "${TAG}" "${INSTALL_PREFIX}"
 }
 
 install_cmake "${version}" "${prefix}"

@@ -16,6 +16,9 @@ class CcacheConan(ConanFile):
     Also note the downloading caching in this package is a little overkill,
     it's like this simlpy because of my history with building a lot of conan
     packages and wanting caching to save time.
+
+    I think a better approach would be not to install to the system, but
+    install create a venv, and source that in my bashrc.
     """
 
     settings = 'os'

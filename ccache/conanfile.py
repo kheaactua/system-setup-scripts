@@ -7,18 +7,9 @@ import os
 
 class CcacheConan(ConanFile):
     """
-    Right now deply calls self.copy, this annoys me in two ways:
-    - I would prefer to simply re-call CMake's install such that I don't need
-      to create my own primitive install process
-    - I would also prefer to call something like checkinstall in order to make
-      this a uninstallable package.
-
-    Also note the downloading caching in this package is a little overkill,
+    The download caching in this package is a little overkill,
     it's like this simlpy because of my history with building a lot of conan
     packages and wanting caching to save time.
-
-    I think a better approach would be not to install to the system, but
-    install create a venv, and source that in my bashrc.
     """
 
     settings = 'os'
@@ -82,8 +73,3 @@ class CcacheConan(ConanFile):
     def package(self):
         cmake = self._set_up_cmake()
         cmake.install()
-
-    def deploy(self):
-        # I don't like that this ignores cmake's install, breaking encapsulation
-        self.copy('*', src='bin', dst='/usr/local/bin')
-        # self.run(f'checkinstall -D -y --pkgname ccache --pkgversion "{self.version}" --pkggroup tools make install')

@@ -9,6 +9,10 @@ from io import BytesIO
 import os
 
 class NvimConan(ConanFile):
+    """
+    Recall, to strip the name and type, build with
+    conan create . nvim/0.5.0-dev-056c464e@_/_
+    """
     settings = 'os'
     description = 'Install neovim 0.5.0 nightly'
     name = 'nvim'
@@ -88,3 +92,9 @@ class NvimConan(ConanFile):
         with tools.chdir('./neovim'):
             env_build = AutoToolsBuildEnvironment(self)
             env_build.install()
+        bin_path = os.path.join(self.package_folder, 'bin')
+        os.symlink(src=os.path.join(bin_path, 'nvim'), dst=os.path.join(bin_path, 'vi'))
+        os.symlink(src=os.path.join(bin_path, 'nvim'), dst=os.path.join(bin_path, 'vim'))
+
+    def package_info(self):
+        self.env_info.PATH.append(os.path.join(self.package_folder, 'bin'))

@@ -45,11 +45,12 @@ function install_with_llvm_script()
 	wget -O ${tmp}/llvm.sh https://apt.llvm.org/llvm.sh \
 		&& chmod +x ${tmp}/llvm.sh \
 		&& ${tmp}/llvm.sh "${v}" \
-		&& apt-get install -qy clang-format-${v} clang-tidy-${v} libclang-${v}-dev \
+		&& apt-get install -qy clang-format-${v} clang-tidy-${v} libclang-${v}-dev lldb-${v} \
 		&&	update-alternatives \
 			--install /usr/bin/clang           clang           ${install_bin_path}/clang-${v}           ${priority} \
 			--slave   /usr/bin/clang++         clang++         ${install_bin_path}/clang++-${v}                     \
 			--slave   /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer-${v}             \
+			--slave   /usr/bin/lldb            lldb            ${install_bin_path}/lldb-${v}                        \
 			--slave   /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server-${v}                 \
 			--slave   /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config-${v}                 \
 			--slave   /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy-${v}                  \

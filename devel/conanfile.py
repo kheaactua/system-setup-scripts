@@ -13,9 +13,9 @@ class DevelConan(ConanFile):
     generators = 'virtualenv'
 
     build_requires = (
-        'ccache/[>=4.2.1]@matt/testing',
+        'ccache/[>=4.2.1]',
         'cmake/[>=3.20.2]',
         'ninja/1.10.2',
         'gtest/1.10.0',
-        'nvim/0.5.0-dev-056c464e',
+        'nvim/0.5.0-dev-24e0c16',
     )

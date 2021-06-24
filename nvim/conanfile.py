@@ -25,7 +25,7 @@ class NvimConan(ConanFile):
         self._commitish = None
 
     def set_version(self):
-        self.version = f'0.5.0-dev-{self.commitish:8.8}'
+        self.version = f'0.5.0-dev-{self.commitish:7.7}'
 
     @property
     def commitish(self):

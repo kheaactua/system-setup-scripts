@@ -9,13 +9,13 @@ class DevelConan(ConanFile):
     settings = 'os'
     description = 'Install Development Tools'
     name = 'devel'
-    version = '0.0.3'
+    version = '0.0.4'
     generators = 'virtualenv'
 
     build_requires = (
         'ccache/[>=4.2.1]',
-        'cmake/[>=3.20.4]',
+        'cmake/[>=3.21]',
         'ninja/1.10.2',
-        'gtest/1.10.0',
-        'nvim/0.5.0-dev-6f48c018',
+        'gtest/1.11.0',
+        'nvim/0.5.1-dev-7899c40',
     )

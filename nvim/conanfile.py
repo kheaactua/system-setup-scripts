@@ -11,10 +11,10 @@ import os
 class NvimConan(ConanFile):
     """
     Recall, to strip the name and type, build with
-    conan create . nvim/0.5.0-dev-056c464e@_/_
+    conan create . nvim/0.5.1-dev-7899c40@_/_
     """
     settings = 'os'
-    description = 'Install neovim 0.5.0 nightly'
+    description = 'Install neovim 0.5.1 nightly'
     name = 'nvim'
     build_requires = (
         'cmake/[>=3.20.2]',
@@ -25,7 +25,7 @@ class NvimConan(ConanFile):
         self._commitish = None
 
     def set_version(self):
-        self.version = f'0.5.0-dev-{self.commitish:7.7}'
+        self.version = f'0.5.1-dev-{self.commitish:7.7}'
 
     @property
     def commitish(self):

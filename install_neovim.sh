@@ -60,7 +60,6 @@ function install_neovim_latest()
 {
 	local -r TAG=$1
 
-	set -x
 	local -r INSTALL_PREFIX=/usr/local
 
 	# Get the source:

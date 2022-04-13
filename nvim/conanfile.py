@@ -12,7 +12,7 @@ import os
 class NvimConan(ConanFile):
     """
     Recall, to strip the name and type, build with
-    conan create . nvim/0.7.0-dev-1bd6c0a@_/_
+    conan create . nvim/0.7.0-dev-0115b3f@_/_
     """
     settings = 'os'
     description = 'Install neovim 0.7.0 nightly'

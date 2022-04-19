@@ -12,7 +12,7 @@ import os
 class NvimConan(ConanFile):
     """
     Recall, to strip the name and type, build with
-    conan create . nvim/v0.8.0-dev+12-147cc60@_/_
+    conan create . nvim/v0.7.0-333ba65@_/_
     """
     settings = 'os'
     description = 'Install neovim 0.7.0 nightly'
@@ -26,7 +26,7 @@ class NvimConan(ConanFile):
         self._commitish = None
 
     def set_version(self):
-        self.version = f'v0.8.0-dev+12-{self.commitish:7.7}'
+        self.version = f'v0.7.0-{self.commitish:7.7}'
 
     @property
     def commitish(self):

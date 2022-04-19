@@ -9,7 +9,7 @@ class DevelConan(ConanFile):
     settings = 'os'
     description = 'Install Development Tools'
     name = 'devel'
-    version = '0.0.7'
+    version = '0.0.9'
     generators = 'virtualenv'
 
     build_requires = (
@@ -17,5 +17,5 @@ class DevelConan(ConanFile):
         'cmake/[>=3.22]',
         'ninja/1.10.2',
         'gtest/1.11.0',
-        'nvim/v0.8.0-dev+12-147cc60'
+        'nvim/v0.7.0-333ba65'
     )

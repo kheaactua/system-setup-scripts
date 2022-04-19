@@ -17,5 +17,5 @@ class DevelConan(ConanFile):
         'cmake/[>=3.22]',
         'ninja/1.10.2',
         'gtest/1.11.0',
-        'nvim/0.7.0-dev-0115b3f'
+        'nvim/v0.8.0-dev+12-147cc60'
     )

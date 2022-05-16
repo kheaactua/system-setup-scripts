@@ -15,7 +15,7 @@ class DevelConan(ConanFile):
     build_requires = (
         'ccache/[>=4.6]',
         'cmake/[>=3.23]',
-        'ninja/1.10.2',
+        'ninja/[>=1.10.2]',
         'gtest/1.11.0',
         'nvim/v0.7.0-333ba65'
     )

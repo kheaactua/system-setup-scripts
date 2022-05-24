@@ -41,7 +41,7 @@ function install_i3_gaps()
 
   cd "${install_prefix}/src/i3-gaps/${tag_name}/build"
 
-  sudo -E -u "${run_as}" meson --prefix "${install_prefix}"
+  sudo -E -u "${run_as}" meson --prefix "${install_prefix}" -Dmans
   sudo -E -u "${run_as}" CCACHE_DIR=/opt/ccache ninja \
     && checkinstall -D -y --pkgname i3-gaps --pkgversion "${tag_name}" --pkggroup x11 ninja install
 }

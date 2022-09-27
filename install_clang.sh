@@ -2,7 +2,7 @@
 
 zmodload zsh/pcre
 
-declare -r VERSION=14.0.0
+declare -r VERSION=14.0.6
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"

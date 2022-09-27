@@ -15,7 +15,7 @@ class CcacheConan(ConanFile):
     settings = 'os'
     description = 'Install ccache'
     name = 'ccache'
-    version = '4.2.1'
+    version = '4.6.3'
     requires = 'helpers/0.3@matt/stable',
     md5_has = '0f95a4b491a4dcd904c8235ee7c660cd'
     no_copy_source = True

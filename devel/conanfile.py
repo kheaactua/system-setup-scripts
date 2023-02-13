@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 
-from conans import ConanFile, CMake, tools
-from conans.errors import ConanException
+from conans import ConanFile
 
-import os
 
 class DevelConan(ConanFile):
     settings = 'os'
     description = 'Install Development Tools'
     name = 'devel'
-    version = '0.0.11'
+    version = '0.0.12'
     generators = 'virtualenv'
 
     build_requires = (

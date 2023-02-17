@@ -3,10 +3,10 @@
 # This script downloads, builds, and installs lua
 
 function pre_install() {
-	apt-get install -y libreadline6-dev
+	apt-get install -y build-essential libreadline-dev unzip
 }
 
-declare -r LUA_VERSION=5.4.3
+declare -r LUA_VERSION=5.4.4
 declare -r INSTALL_PREFIX=/usr/local
 
 function install_version() {

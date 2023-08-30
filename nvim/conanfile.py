@@ -36,6 +36,7 @@ class NvimConan(ConanFile):
 
     @staticmethod
     def get_nightly_commitish():
+        return '333ba6569d833e22c0d291547d740d4bbfa3fdab'
         b_obj = BytesIO()
         crl = pycurl.Curl()
 

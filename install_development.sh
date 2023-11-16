@@ -5,22 +5,29 @@
 
 apt-get install -y   \
     g++              \
-    ccache           \
-    distcc           \
     doxygen          \
     graphviz         \
     libpython3-dev   \
-    cppcheck         \
+    virtualenv       \
     make             \
     build-essential  \
-    libglu1-mesa-dev \
     libssl-dev       \
     dh-autoreconf    \
     pkg-config       \
     libglib2.0-dev   \
     libbz2-dev       \
-    inputplug        \
+    pinentry-tty     \
+    openssh-server   \
+    viewnior         \
+    maim             \
+    scrot             \
+    zsh              \
 
+   # ccache           \
+   # distcc           \
+   # inputplug        \
+   # cppcheck         \
+   # libglu1-mesa-dev \
    # ninja-build      \
    # libXt            \
    # libXNVCtrl       \

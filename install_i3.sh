@@ -2,17 +2,18 @@
 
 function install_i3()
 {
-    add-apt-repository -y ppa:kgilmer/speed-ricer
-    apt-get update
+
+    /usr/lib/apt/apt-helper download-file https://debian.sur5r.net/i3/pool/main/s/sur5r-keyring/sur5r-keyring_2023.02.18_all.deb keyring.deb SHA256:a511ac5f10cd811f8a4ca44d665f2fa1add7a9f09bef238cdfad8461f5239cc4
+    sudo apt install ./keyring.deb
+    echo "deb http://debian.sur5r.net/i3/ $(grep --color=never '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" | sudo tee /etc/apt/sources.list.d/sur5r-i3.list
+    sudo apt update
+    sudo apt install i3 rofi rofi-pass i3lock i3lock-fancy
+
     apt install -qy i3lock feh i3status
-    # apt install -qy i3-gaps i3lock feh
 
     ./install_check.sh
-    ./install_rofi.sh
-    ./install_i3_gaps.sh
     ./install_i3lock_color.sh
-    ./install_i3lock_fancy_rapid.sh
-    ./install_rofi-pass.sh
+    # ./install_i3lock_fancy_rapid.sh
 }
 
 install_i3

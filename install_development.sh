@@ -20,7 +20,8 @@ apt-get install -y   \
     openssh-server   \
     viewnior         \
     maim             \
-    scrot             \
+    scrot            \
+    direnv           \
     zsh              \
 
    # ccache           \

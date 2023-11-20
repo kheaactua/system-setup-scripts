@@ -35,6 +35,18 @@ function install_docker_service()
   # Credential Helper, my config files use it
   sudo apt-get install -qy golang-docker-credential-helpers
 
+  if [[ ! -e /etc/docker/daemon.json ]]; then
+    echo "Enabling docker buildkit"
+    cat <<TOHERE > /etc/docker/daemon.json
+{
+  "features": {
+    "buildkit": true
+  }
+}
+TOHERE
+
+  fi
+
   echo "Verify that the Docker Engine installation is successful by running the hello-world image."
   echo "sudo docker run hello-world"
 }

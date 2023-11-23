@@ -52,4 +52,8 @@ function install_nodejs()
 
 install_nodejs
 
+echo "Install the dracula theme, and also https://github.com/Gogh-Co/Gogh#%EF%B8%8F-pre-install"
+
+themes=(pali solarized-light solarized-dark ayu elemental lunaria-eclipse relaxed rose-pine-dawn rose-pine-moon synthwave-alpha zenburn)
+
 # vim: ts=3 ts=3 sts=0 expandtab ft=sh ffs=unix :

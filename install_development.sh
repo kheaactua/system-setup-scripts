@@ -25,8 +25,16 @@ sudo apt-get install -y   \
     plocate          \
     ca-certificates  \
     curl             \
-    gnupg            \
+    gnupg2           \
     zsh              \
+    shellcheck       \
+    libstdc++-12-dev \
+    pavucontrol      \
+    mscgen           \
+    graphviz         \
+    asciidoc         \
+    doxygen          \
+    dia              \
 
    # ccache           \
    # distcc           \

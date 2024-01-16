@@ -2,7 +2,7 @@
 
 zmodload zsh/pcre
 
-declare -r VERSION=17.0.1
+declare -r VERSION=17.0.6
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"
@@ -57,6 +57,8 @@ function install_with_llvm_script()
 			--slave   /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format-${v}                \
 			--slave   /usr/bin/clangd          clangd          ${install_bin_path}/clangd-${v}                      \
 			--slave   /usr/bin/lld             lld             ${install_bin_path}/lld-${v}                         \
+			--slave   /usr/bin/llvm-ar         llvm-ar         ${install_bin_path}/llvm-ar-${v}                     \
+			--slave   /usr/bin/llvm-ranlib     llvm-ranlib     ${install_bin_path}/llvm-ranlib-${v}                  \
 			--slave   /usr/bin/run-clang-tidy.py        run-clang-tidy.py        ${install_bin_path}/run-clang-tidy-${v}.py        \
 			--slave   /usr/bin/run-clang-tidy           run-clang-tidy           ${install_bin_path}/run-clang-tidy-${v}           \
 			--slave   /usr/bin/clang-apply-replacements clang-apply-replacements ${install_bin_path}/clang-apply-replacements-${v} \

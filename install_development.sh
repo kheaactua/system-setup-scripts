@@ -35,6 +35,7 @@ sudo apt-get install -y   \
     asciidoc         \
     doxygen          \
     dia              \
+    source-highlight \
 
    # ccache           \
    # distcc           \

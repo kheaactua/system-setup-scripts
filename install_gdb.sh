@@ -20,40 +20,46 @@ function install_gdb() {
 	local -r TAG=$1
 	local -r INSTALL_PREFIX=/usr/local
 
-	which bison 2>&1 > /dev/null
+	which bison > /dev/null 2>&1
 	if [[ $? != 0 ]]; then
-		apt-get install bison
+		sudo apt-get -qy install bison
 	fi
 
-	which flex 2>&1 > /dev/null
+	which flex > /dev/null 2>&1
 	if [[ $? != 0 ]]; then
-		apt-get install flex
+		sudo apt-get -qy install flex
 	fi
+
+	# sudo apt-get -qy install libmpfrc++-dev libgmp3-dev
 
 	# Get the source:
 	if [[ ! -d "${INSTALL_PREFIX}/src/gdb" ]]; then
-		mkdir -p "${INSTALL_PREFIX}/src"
+		sudo mkdir -p "${INSTALL_PREFIX}/src"
+		sudo chown -R $(whoami):$(whoami) "${INSTALL_PREFIX}/src"
 		cd "${INSTALL_PREFIX}/src"
 		git clone git://sourceware.org/git/binutils-gdb.git
 	fi
 
 	cd "${INSTALL_PREFIX}/src/binutils-gdb"
-	git checkout ${TAG}
+	git checkout "${TAG}"
 	git pull
 
-	CC=gcc ./configure --prefix=/usr/local \
-		&& make                             \
-		&& make install
+	CC=gcc ./configure \
+		--with-python=/usr/bin/python3 \
+		--prefix=/usr/local \
+		&& make  \
+		&& sudo make install
 
 	local ret=$?
 	if [[ "${ret}" == 0 ]]; then
-		local -r priority=$(expr $(getPriority gdb) + 1)
+		local -r priority="$(expr $(getPriority gdb) + 1)"
 
-		update-alternatives --install /usr/bin/gdb gdb ${INSTALL_PREFIX}/bin/gdb ${priority}
+		sudo update-alternatives --install /usr/bin/gdb gdb "${INSTALL_PREFIX}/bin/gdb" "${priority}"
 
 	fi
 }
 
-install_gdb gdb-7.12.1-release
+# install_gdb gdb-7.12.1-release
+install_gdb gdb-14.1-release
 
 # vim: ts=3 sw=3 sts=0 noet :

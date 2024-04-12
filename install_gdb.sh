@@ -16,6 +16,7 @@ function getPriority() {
 }
 
 function install_gdb() {
+	set -e
 
 	local -r TAG=$1
 	local -r INSTALL_PREFIX=/usr/local
@@ -32,17 +33,23 @@ function install_gdb() {
 
 	# sudo apt-get -qy install libmpfrc++-dev libgmp3-dev
 
+	local src_base_dir=${INSTALL_PREFIX}/src
+	local src_dir=${src_base_dir}/gdb
+
+	if [[ ! -d "${src_base_dir}" ]]; then
+		sudo mkdir -p "${scr_base_dir}"
+	fi
+	sudo chown -R $(whoami):$(whoami) "${src_base_dir}"
+
 	# Get the source:
-	if [[ ! -d "${INSTALL_PREFIX}/src/gdb" ]]; then
-		sudo mkdir -p "${INSTALL_PREFIX}/src"
-		sudo chown -R $(whoami):$(whoami) "${INSTALL_PREFIX}/src"
-		cd "${INSTALL_PREFIX}/src"
-		git clone git://sourceware.org/git/binutils-gdb.git
+	if [[ ! -d "${src_dir}" ]]; then
+		cd "${src_base_dir}"
+		git clone git://sourceware.org/git/binutils-gdb.git -b "${TAG}" "${src_dir}"
 	fi
 
-	cd "${INSTALL_PREFIX}/src/binutils-gdb"
+	cd "${src_dir}"
+	git fetch
 	git checkout "${TAG}"
-	git pull
 
 	CC=gcc ./configure \
 		--with-python=/usr/bin/python3 \
@@ -55,11 +62,10 @@ function install_gdb() {
 		local -r priority="$(expr $(getPriority gdb) + 1)"
 
 		sudo update-alternatives --install /usr/bin/gdb gdb "${INSTALL_PREFIX}/bin/gdb" "${priority}"
-
 	fi
 }
 
 # install_gdb gdb-7.12.1-release
-install_gdb gdb-14.1-release
+install_gdb gdb-14.2-release
 
 # vim: ts=3 sw=3 sts=0 noet :

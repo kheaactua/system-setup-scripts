@@ -2,7 +2,7 @@
 
 zmodload zsh/pcre
 
-declare -r VERSION=17.0.6
+declare -r VERSION=18.1.8
 
 # Source list for apt
 declare -r list_file="/etc/apt/sources.list.d/llvm.list"
@@ -44,8 +44,11 @@ function install_with_llvm_script()
 	tmp=$(mktemp -d)
 	wget -O ${tmp}/llvm.sh https://apt.llvm.org/llvm.sh \
 		&& chmod +x ${tmp}/llvm.sh \
-		&& ${tmp}/llvm.sh "${v}" \
-		&& apt-get install -qy clang-format-${v} clang-tidy-${v} libclang-${v}-dev lldb-${v} lld-${v} \
+		&& ${tmp}/llvm.sh "${v}" all \
+		&& apt-get install -qy \
+			clang-format-${v} clang-tidy-${v} \
+			libclang-${v}-dev lldb-${v} \
+			lld-${v} \
 		&&	update-alternatives \
 			--install /usr/bin/clang           clang           ${install_bin_path}/clang-${v}           ${priority} \
 			--slave   /usr/bin/clang++         clang++         ${install_bin_path}/clang++-${v}                     \
@@ -62,6 +65,7 @@ function install_with_llvm_script()
 			--slave   /usr/bin/run-clang-tidy.py        run-clang-tidy.py        ${install_bin_path}/run-clang-tidy-${v}.py        \
 			--slave   /usr/bin/run-clang-tidy           run-clang-tidy           ${install_bin_path}/run-clang-tidy-${v}           \
 			--slave   /usr/bin/clang-apply-replacements clang-apply-replacements ${install_bin_path}/clang-apply-replacements-${v} \
+			--slave   /use/bin/clang-scan-deps-18       clang-scan-deps-18       ${install_bin_path}/clang-scan-deps-${v}          \
 
 }
 

@@ -33,6 +33,36 @@ function getIssue() {
 	echo $(lsb_release -rs)
 }
 
+function do-update-alternatives() {
+	# Check if the command is available
+	if ! command -v update-alternatives &> /dev/null; then
+		echo "update-alternatives could not be found"
+		return 1
+	fi
+
+	local -r v=${1}
+
+	update-alternatives \
+		--install /usr/bin/clang           clang           ${install_bin_path}/clang-${v}           ${priority} \
+		--slave   /usr/bin/clang++         clang++         ${install_bin_path}/clang++-${v}                     \
+		--slave   /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer-${v}             \
+		--slave   /usr/bin/lldb            lldb            ${install_bin_path}/lldb-${v}                        \
+		--slave   /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server-${v}                 \
+		--slave   /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config-${v}                 \
+		--slave   /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy-${v}                  \
+		--slave   /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format-${v}                \
+		--slave   /usr/bin/clangd          clangd          ${install_bin_path}/clangd-${v}                      \
+		--slave   /usr/bin/lld             lld             ${install_bin_path}/lld-${v}                         \
+		--slave   /usr/bin/llvm-ar         llvm-ar         ${install_bin_path}/llvm-ar-${v}                     \
+		--slave   /usr/bin/llvm-ranlib     llvm-ranlib     ${install_bin_path}/llvm-ranlib-${v}                  \
+		--slave   /usr/bin/run-clang-tidy.py        run-clang-tidy.py        ${install_bin_path}/run-clang-tidy-${v}.py        \
+		--slave   /usr/bin/run-clang-tidy           run-clang-tidy           ${install_bin_path}/run-clang-tidy-${v}           \
+		--slave   /usr/bin/clang-apply-replacements clang-apply-replacements ${install_bin_path}/clang-apply-replacements-${v} \
+		--slave   /use/bin/clang-scan-deps-${v}     clang-scan-deps-${v}     ${install_bin_path}/clang-scan-deps-${v}          \
+
+	return $?
+}
+
 function install_with_llvm_script()
 {
 	local -r v=$(echo "$1" | sed 's/\([[:digit:]]\+\).*/\1/')
@@ -49,24 +79,7 @@ function install_with_llvm_script()
 			clang-format-${v} clang-tidy-${v} \
 			libclang-${v}-dev lldb-${v} \
 			lld-${v} \
-		&&	update-alternatives \
-			--install /usr/bin/clang           clang           ${install_bin_path}/clang-${v}           ${priority} \
-			--slave   /usr/bin/clang++         clang++         ${install_bin_path}/clang++-${v}                     \
-			--slave   /usr/bin/llvm-symbolizer llvm-symbolizer ${install_bin_path}/llvm-symbolizer-${v}             \
-			--slave   /usr/bin/lldb            lldb            ${install_bin_path}/lldb-${v}                        \
-			--slave   /usr/bin/lldb-server     lldb-server     ${install_bin_path}/lldb-server-${v}                 \
-			--slave   /usr/bin/llvm-config     llvm-config     ${install_bin_path}/llvm-config-${v}                 \
-			--slave   /usr/bin/clang-tidy      clang-tidy      ${install_bin_path}/clang-tidy-${v}                  \
-			--slave   /usr/bin/clang-format    clang-format    ${install_bin_path}/clang-format-${v}                \
-			--slave   /usr/bin/clangd          clangd          ${install_bin_path}/clangd-${v}                      \
-			--slave   /usr/bin/lld             lld             ${install_bin_path}/lld-${v}                         \
-			--slave   /usr/bin/llvm-ar         llvm-ar         ${install_bin_path}/llvm-ar-${v}                     \
-			--slave   /usr/bin/llvm-ranlib     llvm-ranlib     ${install_bin_path}/llvm-ranlib-${v}                  \
-			--slave   /usr/bin/run-clang-tidy.py        run-clang-tidy.py        ${install_bin_path}/run-clang-tidy-${v}.py        \
-			--slave   /usr/bin/run-clang-tidy           run-clang-tidy           ${install_bin_path}/run-clang-tidy-${v}           \
-			--slave   /usr/bin/clang-apply-replacements clang-apply-replacements ${install_bin_path}/clang-apply-replacements-${v} \
-			--slave   /use/bin/clang-scan-deps-18       clang-scan-deps-18       ${install_bin_path}/clang-scan-deps-${v}          \
-
+		&&	do-update-alternatives "${v}"
 }
 
 function install_version_apt()

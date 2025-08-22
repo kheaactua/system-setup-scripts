@@ -36,6 +36,7 @@ sudo apt-get install -y   \
     doxygen          \
     dia              \
     source-highlight \
+    gawk             \
 
    # ccache           \
    # distcc           \
@@ -59,7 +60,8 @@ function install_nodejs()
   sudo apt-get install nodejs -y
 }
 
-install_nodejs
+# This is now done with nvs
+# install_nodejs
 
 echo "Install the dracula theme, and also https://github.com/Gogh-Co/Gogh#%EF%B8%8F-pre-install"
 

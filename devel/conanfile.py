@@ -10,14 +10,16 @@ class DevelConan(ConanFile):
     version = '0.0.13'
     generators = 'VirtualRunEnv'
 
-    build_requires = (
+    tool_requires = (
         'ccache/[>=4.8]',
-        # 'cmake/[>=3.23]',
+        # 'cmake/[>=3.25]',
         'ninja/[>=1.10.2]',
         # 'gtest/1.11.0',
         # 'nvim/v0.7.0-333ba65'
     )
+
     requires = (
         'ccache/[>=4.8]',
+        'cmake/[>=3.21]',
         'ninja/[>=1.10.2]',
     )

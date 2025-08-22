@@ -12,13 +12,13 @@ function install_i3lock_fancy_rapid()
 
   # First, install the build dependencies
   apt install -y \
-    git make gcc autoconf automake i3lock
+    git make gcc autoconf automake i3lock libx11-dev
 
   # Get the source:
   if [ ! -d "${install_prefix}/src/i3lock-fancy-rapid" ]; then
     mkdir -p "${install_prefix}/src"
     cd "${INSTALL_PREFIX}/src"
-    git clone https://github.com/yvbbrjdr/i3lock-fancy-rapid
+    git clone https://github.com/yvbbrjdr/i3lock-fancy-rapid -b "${tag}"
     chown -R "${run_as}": "${install_prefix}/src/i3lock-fancy-rapid"
   fi
 

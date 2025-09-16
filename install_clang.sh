@@ -47,6 +47,20 @@ function do-update-alternatives() {
 	return $?
 }
 
+function dowload_llvm_install_script()
+{
+	local -r dest="${1:-/tmp}"
+	wget -O "${dest}/llvm.sh" https://apt.llvm.org/llvm.sh \
+		&& chmod +x "${dest}/llvm.sh"
+	echo "${dest}/llvm.sh"
+
+	if [[ -e "${dest}/llvm.sh" ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
 function install_with_llvm_script()
 {
 	# llvm basically justs adds repos and apt installs clang, so it all goes to
@@ -56,8 +70,8 @@ function install_with_llvm_script()
   local -r install_bin_path=${1:-/usr/bin}
 
 	local -r tmp="$(mktemp -d)"
-	wget -O "${tmp}/llvm.sh" https://apt.llvm.org/llvm.sh \
-		&& chmod +x "${tmp}/llvm.sh"
+	download_llvm_install_script "${tmp}" \
+			|| { echo "Failed to download llvm install script"; return 1; }
 
   local -r v=$(source <(grep --color=never "^CURRENT_LLVM_STABLE=[[:digit:]]" "${tmp}/llvm.sh") && echo ${CURRENT_LLVM_STABLE})
 
@@ -67,11 +81,11 @@ function install_with_llvm_script()
     "lld-${v}" \
   )
 
-
   "${tmp}/llvm.sh" "${v}" \
   && apt-get install "${pkgs[@]}" -qy \
 		&&	do-update-alternatives "${v}" "${install_bin_path}"
 }
+
 
 install_with_llvm_script "/usr/bin"
 

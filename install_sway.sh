@@ -38,7 +38,9 @@ function install_wlroot()
     libxcb-xfixes0-dev \
     libxkbcommon-dev \
     libxcb-xinput-dev \
-    libx11-xcb-dev
+    libx11-xcb-dev \
+    libxcb-ewmh-dev \
+    libxcb-res0-dev
 
   local wlroots_src_dir="${install_prefix}/src/wlroots"
 
@@ -47,16 +49,25 @@ function install_wlroot()
     mkdir -p "$(dirname "${wlroots_src_dir}")"
     cd "$(dirname "${wlroots_src_dir}")"
     git clone https://gitlab.freedesktop.org/wlroots/wlroots.git "${wlroots_src_dir}"
-    cd "${wlroots_src_dir}"
+  fi
+  cd "${wlroots_src_dir}"
 
-    # TODO not sure I should specify a tag
-    git checkout 0.19.1
-    chown -R "${run_as}": "${wlroots_src_dir}"
+  if [[ -e bld ]]; then
+    echo "Clearing old build directory"
+    rm -rf bld
   fi
 
+  # TODO not sure I should specify a tag
+  git fetch
+  git checkout 0.19.2
+  chown -R "${run_as}": "${wlroots_src_dir}"
+
   cd "${wlroots_src_dir}"
-  sudo -E -u "${run_as}" meson bld \
-    && sudo -E -u "${run_as}" ninja -C bld \
+
+  local -r bld_dir="${wlroots_src_dir}/bld"
+
+  sudo -E -u "${run_as}" meson setup "${bld_dir}" -Dxwayland=enabled \
+    && sudo -E -u "${run_as}" ninja -C "${bld_dir}" \
 
     # && ninja -C bld install
 }

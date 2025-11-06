@@ -47,7 +47,7 @@ function do-update-alternatives() {
 	return $?
 }
 
-function dowload_llvm_install_script()
+function download_llvm_install_script()
 {
 	local -r dest="${1:-/tmp}"
 	wget -O "${dest}/llvm.sh" https://apt.llvm.org/llvm.sh \

@@ -17,7 +17,7 @@ function install_check()
   # Get the source:
   if [ ! -d "${install_prefix}/src/check" ]; then
     mkdir -p "${install_prefix}/src"
-    cd "${INSTALL_PREFIX}/src"
+    cd "${install_prefix}/src"
     git clone --recursive https://github.com/libcheck/check.git
     chown -R "${run_as}": "${install_prefix}/src/check"
   fi

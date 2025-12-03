@@ -29,7 +29,7 @@ function install_tmux() {
 	if [[ ! -d "${install_prefix}/src/tmux" ]]; then
 		mkdir -p "${install_prefix}/src"
 		cd "${install_prefix}/src"
-		git clone https://github.com/tmux/tmux.git
+		sudo -u matt git clone https://github.com/tmux/tmux.git
 	fi
 
 	cd "${install_prefix}/src/tmux"
@@ -52,6 +52,6 @@ function install_tmux() {
 	fi
 }
 
-install_tmux 3.3
+install_tmux 3.6
 
 # vim: ts=3 sw=3 sts=0 noet :

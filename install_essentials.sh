@@ -3,9 +3,8 @@
 # This script is used to install a series of packages that
 # I consider essential for me to have on a Linux computer.
 
-apt-get install -qy \
+sudo apt-get install -qy \
   software-properties-common \
-  git \
   htop \
   openssh-server \
   zsh \
@@ -13,10 +12,6 @@ apt-get install -qy \
   xsel \
   pass \
   stow \
-  environment-modules \
-  ripgrep \
-  fd-find \
-  cargo \
   locate \
   wget \
   gettext \
@@ -25,18 +20,20 @@ apt-get install -qy \
   checkinstall \
   jq \
   gpgconf gpgv2 \
-  unzip
+  unzip \
+  && sudo apt autoremove -qy
+
+  # These all have better installers
+  # environment-modules \
+  # ripgrep \
+  # fd-find \
+  # cargo \
 
 # Upgrade git and repo
-apt-get install -qy software-properties-common \
-  && add-apt-repository ppa:git-core/ppa     \
-  && apt-get update                          \
-  && apt-get install -qy git git-core git-lfs git-man
+sudo apt-get install -qy software-properties-common \
+  && sudo add-apt-repository ppa:git-core/ppa     \
+  && sudo apt-get update                          \
+  && sudo apt-get install -qy git git-core git-lfs git-man
 
-sudo -u matt cargo install exa dust ytop bat sd
-
-./install_lua.sh
-./install_tmux.sh
-./install_neovim.sh
-./install_check.sh
-./install_i3.sh
+sudo -u matt "$(which cargo)" install exa dust ytop bat sd
+sudo -u matt "$(which brew)" install lua luarocks tmux gh

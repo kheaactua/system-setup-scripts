@@ -40,7 +40,10 @@ function install_wlroot()
     libxcb-xinput-dev \
     libx11-xcb-dev \
     libxcb-ewmh-dev \
-    libxcb-res0-dev
+    libxcb-res0-dev \
+    libxcb-dri3-dev \
+    libxcb-present-dev \
+    libxcb-render-util0-dev
 
   local wlroots_src_dir="${install_prefix}/src/wlroots"
 
@@ -52,9 +55,11 @@ function install_wlroot()
   fi
   cd "${wlroots_src_dir}"
 
-  if [[ -e bld ]]; then
+  local -r bld_dir="${wlroots_src_dir}/bld"
+
+  if [[ -e "${bld_dir}" ]]; then
     echo "Clearing old build directory"
-    rm -rf bld
+    rm -rf "${bld_dir}"
   fi
 
   # TODO not sure I should specify a tag
@@ -119,10 +124,12 @@ function install_sway()
   # This also takes a newer libinput, I used this ppa:
   # https://launchpad.net/~ubuntuhandbook1/+archive/ubuntu/libinput-4fg
 
+  local -r bld_dir="${sway_src_dir}/bld"
+
   cd "${sway_src_dir}"
-  sudo -E -u "${run_as}" meson bld \
-    && sudo -E -u "${run_as}" ninja -C bld \
-    && ninja -C bld install
+  sudo -E -u "${run_as}" meson "${bld_dir}" \
+    && sudo -E -u "${run_as}" ninja -C "${bld_dir}" \
+    && ninja -C "${bld_dir}" install
 
   set +e
 }

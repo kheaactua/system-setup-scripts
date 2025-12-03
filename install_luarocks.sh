@@ -15,18 +15,18 @@ function install_luarocks() {
 	local -r src="${INSTALL_PREFIX}/src"
 
 	# Get the source
-	cd "${src}"
-	wget https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz
-	tar xapf luarocks-${LUAROCKS_VERSION}.tar.gz
+	cd "${src}" && chown matt "${src}"
+	sudo -u matt wget https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz
+	sudo -u matt tar xapf luarocks-${LUAROCKS_VERSION}.tar.gz
 
 	# Enter the directory
-	cd luarocks-${v}
+	cd "luarocks-${v}"
 	pwd
-	./configure \
+	sudo -u matt ./configure \
 		--prefix=/usr/local \
 		--with-lua-include=/usr/local/include \
 		--with-lua-bin=$(dirname $(which lua)) \
-		&& make \
+		&& sudo -u make \
 		&& make install
 }
 
@@ -37,7 +37,8 @@ declare installed_version=$(luarocks --version | sed 's/.*\([[:digit:]]\.[[:digi
 if [[ "${installed_version}" == "${LUAROCKS_VERSION}" && "$1" != "force" ]]; then
 	echo "${LUAROCKS_VERSION} already installed at $(which luarocks)"
 else
-	install_luarocks "${LUAROCKS_VERSION}"
+	# install_luarocks "${LUAROCKS_VERSION}"
+	echo "Why not use brew install luarocks"
 fi
 
 # vim: ts=3 sw=3 sts=0 noet :

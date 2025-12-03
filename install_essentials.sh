@@ -35,5 +35,7 @@ sudo apt-get install -qy software-properties-common \
   && sudo apt-get update                          \
   && sudo apt-get install -qy git git-core git-lfs git-man
 
-sudo -u matt "$(which cargo)" install exa dust ytop bat sd
-sudo -u matt "$(which brew)" install lua luarocks tmux gh
+# Need something to install brew
+
+sudo -u matt "$(which cargo)" install exa dust ytop bat sd bob-nvim
+sudo -u matt "$(which brew)" install lua luarocks tmux gh ninja

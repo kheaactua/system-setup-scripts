@@ -69,8 +69,6 @@ function install_wlroot()
 
   cd "${wlroots_src_dir}"
 
-  local -r bld_dir="${wlroots_src_dir}/bld"
-
   sudo -E -u "${run_as}" meson setup "${bld_dir}" -Dxwayland=enabled \
     && sudo -E -u "${run_as}" ninja -C "${bld_dir}" \
 

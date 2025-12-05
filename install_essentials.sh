@@ -38,4 +38,4 @@ sudo apt-get install -qy software-properties-common \
 # Need something to install brew
 
 sudo -u matt "$(which cargo)" install exa dust ytop bat sd bob-nvim
-sudo -u matt "$(which brew)" install lua luarocks tmux gh ninja
+sudo -u matt "$(which brew)" install lua luarocks tmux gh ninja difftastic

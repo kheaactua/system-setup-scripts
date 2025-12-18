@@ -72,7 +72,8 @@ function install_wlroot()
   sudo -E -u "${run_as}" meson setup "${bld_dir}" -Dxwayland=enabled \
     && sudo -E -u "${run_as}" ninja -C "${bld_dir}" \
 
-    # && ninja -C bld install
+    # Sway seems to encapsulate wlroots, but it's good to have a way to test the install
+    # && ninja -C "${bld_dir}" install
 }
 
 function install_sway()
@@ -132,7 +133,7 @@ function install_sway()
   set +e
 }
 
-# install_wlroot
-install_sway
+install_wlroot
+# install_sway
 
 # vim: ts=2 sw=2 sts=0 expandtab :

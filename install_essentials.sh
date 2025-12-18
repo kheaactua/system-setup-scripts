@@ -8,6 +8,7 @@ sudo apt-get install -qy \
   htop \
   openssh-server \
   zsh \
+  fish \
   curl \
   xsel \
   pass \

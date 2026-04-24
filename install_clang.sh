@@ -27,18 +27,20 @@ function do-update-alternatives() {
 	local -r prefix="${2}"
 
 	update-alternatives \
-		--install /usr/bin/clang           clang           "${prefix}/clang-${v}"           "${priority}" \
-		--slave   /usr/bin/clang++         clang++         "${prefix}/clang++-${v}"                       \
-		--slave   /usr/bin/llvm-symbolizer llvm-symbolizer "${prefix}/llvm-symbolizer-${v}"               \
-		--slave   /usr/bin/lldb            lldb            "${prefix}/lldb-${v}"                          \
-		--slave   /usr/bin/lldb-server     lldb-server     "${prefix}/lldb-server-${v}"                   \
-		--slave   /usr/bin/llvm-config     llvm-config     "${prefix}/llvm-config-${v}"                   \
-		--slave   /usr/bin/clang-tidy      clang-tidy      "${prefix}/clang-tidy-${v}"                    \
-		--slave   /usr/bin/clang-format    clang-format    "${prefix}/clang-format-${v}"                  \
-		--slave   /usr/bin/clangd          clangd          "${prefix}/clangd-${v}"                        \
-		--slave   /usr/bin/lld             lld             "${prefix}/lld-${v}"                           \
-		--slave   /usr/bin/llvm-ar         llvm-ar         "${prefix}/llvm-ar-${v}"                       \
-		--slave   /usr/bin/llvm-ranlib     llvm-ranlib     "${prefix}/llvm-ranlib-${v}"                   \
+		--install /usr/bin/clang             clang             "${prefix}/clang-${v}"           "${priority}" \
+		--slave   /usr/bin/clang++           clang++           "${prefix}/clang++-${v}"                       \
+		--slave   /usr/bin/llvm-symbolizer   llvm-symbolizer   "${prefix}/llvm-symbolizer-${v}"               \
+		--slave   /usr/bin/lldb              lldb              "${prefix}/lldb-${v}"                          \
+		--slave   /usr/bin/lldb-server       lldb-server       "${prefix}/lldb-server-${v}"                   \
+		--slave   /usr/bin/llvm-config       llvm-config       "${prefix}/llvm-config-${v}"                   \
+		--slave   /usr/bin/clang-tidy        clang-tidy        "${prefix}/clang-tidy-${v}"                    \
+		--slave   /usr/bin/clang-format      clang-format      "${prefix}/clang-format-${v}"                  \
+		--slave   /usr/bin/clang-format-diff clang-format-diff "${prefix}/clang-format-diff-${v}"             \
+		--slave   /usr/bin/git-clang-format  git-clang-format  "${prefix}/git-clang-format-${v}"              \
+		--slave   /usr/bin/clangd            clangd            "${prefix}/clangd-${v}"                        \
+		--slave   /usr/bin/lld               lld               "${prefix}/lld-${v}"                           \
+		--slave   /usr/bin/llvm-ar           llvm-ar           "${prefix}/llvm-ar-${v}"                       \
+		--slave   /usr/bin/llvm-ranlib       llvm-ranlib       "${prefix}/llvm-ranlib-${v}"                   \
 		--slave   /usr/bin/run-clang-tidy.py        run-clang-tidy.py        "${prefix}/run-clang-tidy-${v}.py"        \
 		--slave   /usr/bin/run-clang-tidy           run-clang-tidy           "${prefix}/run-clang-tidy-${v}"           \
 		--slave   /usr/bin/clang-apply-replacements clang-apply-replacements "${prefix}/clang-apply-replacements-${v}" \
